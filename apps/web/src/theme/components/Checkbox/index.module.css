@@ -1,10 +1,17 @@
 .input {
   font-size: 16px;
+  border-radius: 50%;
 
   &::placeholder,
   &:disabled,
   &:disabled::placeholder {
     color: '#6d747b !important';
+  }
+
+  &:checked {
+    background-color: transparent;
+    border-color: var(--mantine-primary-color-filled);
+    border-width: 2px;
   }
 }
 
@@ -20,10 +27,11 @@
 .label {
   font-size: 16px;
   line-height: 24px;
-  font-weight: 600;
-  margin-bottom: 8px;
+  color: rgba(163, 163, 163, 1);
 }
-.error {
-  font-size: 14px;
-  line-height: 21px;
+
+.icon {
+  color: var(--mantine-primary-color-filled);
+  width: 9px;
+  height: 9px;
 }

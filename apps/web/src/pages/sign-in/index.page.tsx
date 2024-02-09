@@ -8,14 +8,11 @@ import { IconAlertCircle } from '@tabler/icons-react';
 
 import { accountApi } from 'resources/account';
 
-import config from 'config';
 import { handleError } from 'utils';
 import { RoutePath } from 'routes';
 import { Link } from 'components';
 
 import { EMAIL_REGEX } from 'app-constants';
-
-import { GoogleIcon } from 'public/icons';
 
 const schema = z.object({
   email: z.string().regex(EMAIL_REGEX, 'Email format is incorrect.'),
@@ -41,7 +38,7 @@ const SignIn: NextPage = () => {
         <title>Sign in</title>
       </Head>
       <Stack w={408} gap={20}>
-        <Stack gap={34}>
+        <Stack gap={20}>
           <Title order={1}>Sign In</Title>
 
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -65,39 +62,22 @@ const SignIn: NextPage = () => {
                   {errors.credentials.message}
                 </Alert>
               )}
-
-              <Link
-                href={RoutePath.ForgotPassword}
-                type="router"
-                underline={false}
-                size="md"
-                align="center"
-              >
-                Forgot password?
-              </Link>
             </Stack>
 
             <Button
               loading={isSignInLoading}
               type="submit"
               fullWidth
-              mt={34}
+              mt={32}
+              h={40}
+              size="sm"
             >
               Sign in
             </Button>
           </form>
         </Stack>
 
-        <Stack gap={34}>
-          <Button
-            component="a"
-            leftSection={<GoogleIcon />}
-            href={`${config.API_URL}/account/sign-in/google/auth`}
-            variant="outline"
-          >
-            Continue with Google
-          </Button>
-
+        <Stack gap={20}>
           <Group fz={16} justify="center" gap={12}>
             Don’t have an account?
             <Link

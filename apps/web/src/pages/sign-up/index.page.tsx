@@ -13,8 +13,6 @@ import {
   Title,
   Text,
   Checkbox,
-  SimpleGrid,
-  Tooltip,
 } from '@mantine/core';
 
 import { accountApi } from 'resources/account';
@@ -26,11 +24,7 @@ import { RoutePath } from 'routes';
 
 import { EMAIL_REGEX, PASSWORD_REGEX } from 'app-constants';
 
-import { GoogleIcon } from 'public/icons';
-
 const schema = z.object({
-  firstName: z.string().min(1, 'Please enter First name').max(100),
-  lastName: z.string().min(1, 'Please enter Last name').max(100),
   email: z.string().regex(EMAIL_REGEX, 'Email format is incorrect.'),
   password: z.string().regex(PASSWORD_REGEX, 'The password must contain 6 or more characters with at least one letter (a-z) and one number (0-9).'),
 });
@@ -39,15 +33,15 @@ type SignUpParams = z.infer<typeof schema>;
 
 const passwordRules = [
   {
-    title: 'Be 6-50 characters',
+    title: 'Must be at least 8 characters',
     done: false,
   },
   {
-    title: 'Have at least one letter',
+    title: 'Must contain lover case and capital letters',
     done: false,
   },
   {
-    title: 'Have at least one number',
+    title: 'Must contain at least 1 number',
     done: false,
   },
 ];
@@ -58,7 +52,6 @@ const SignUp: NextPage = () => {
   const [signupToken, setSignupToken] = useState();
 
   const [passwordRulesData, setPasswordRulesData] = useState(passwordRules);
-  const [opened, setOpened] = useState(false);
 
   const {
     register,
@@ -74,9 +67,8 @@ const SignUp: NextPage = () => {
 
   useEffect(() => {
     const updatedPasswordRulesData = [...passwordRules];
-
-    updatedPasswordRulesData[0].done = passwordValue.length >= 6 && passwordValue.length <= 50;
-    updatedPasswordRulesData[1].done = /[a-zA-Z]/.test(passwordValue);
+    updatedPasswordRulesData[0].done = passwordValue.length >= 8 && passwordValue.length <= 256;
+    updatedPasswordRulesData[1].done = /(?=.*[A-Z])(?=.*[a-z])/.test(passwordValue);
     updatedPasswordRulesData[2].done = /\d/.test(passwordValue);
 
     setPasswordRulesData(updatedPasswordRulesData);
@@ -93,25 +85,6 @@ const SignUp: NextPage = () => {
     },
     onError: (e) => handleError(e, setError),
   });
-
-  const label = (
-    <SimpleGrid
-      cols={1}
-      spacing="xs"
-      p={4}
-    >
-      <Text>Password must:</Text>
-
-      {passwordRulesData.map((ruleData) => (
-        <Checkbox
-          styles={{ label: { color: 'white' } }}
-          key={ruleData.title}
-          checked={ruleData.done}
-          label={ruleData.title}
-        />
-      ))}
-    </SimpleGrid>
-  );
 
   if (registered) {
     return (
@@ -147,28 +120,11 @@ const SignUp: NextPage = () => {
       <Head>
         <title>Sign up</title>
       </Head>
-      <Stack w={408} gap={20}>
-        <Stack gap={34}>
+      <Stack w={408} gap={32}>
+        <Stack gap={32}>
           <Title order={1}>Sign Up</Title>
-
           <form onSubmit={handleSubmit(onSubmit)}>
             <Stack gap={20}>
-              <TextInput
-                {...register('firstName')}
-                label="First Name"
-                maxLength={100}
-                placeholder="First Name"
-                error={errors.firstName?.message}
-              />
-
-              <TextInput
-                {...register('lastName')}
-                label="Last Name"
-                maxLength={100}
-                placeholder="Last Name"
-                error={errors.lastName?.message}
-              />
-
               <TextInput
                 {...register('email')}
                 label="Email Address"
@@ -176,43 +132,37 @@ const SignUp: NextPage = () => {
                 error={errors.email?.message}
               />
 
-              <Tooltip
-                label={label}
-                withArrow
-                opened={opened}
-              >
-                <PasswordInput
-                  {...register('password')}
-                  label="Password"
-                  placeholder="Enter password"
-                  onFocus={() => setOpened(true)}
-                  onBlur={() => setOpened(false)}
-                  error={errors.password?.message}
-                />
-              </Tooltip>
+              <PasswordInput
+                {...register('password')}
+                label="Password"
+                placeholder="Enter password"
+                error={errors.password?.message}
+              />
+              <Group gap={8}>
+                {passwordRulesData.map((ruleData) => (
+                  <Checkbox
+                    key={ruleData.title}
+                    checked={ruleData.done}
+                    label={ruleData.title}
+                  />
+                ))}
+              </Group>
             </Stack>
 
             <Button
               type="submit"
               loading={isSignUpLoading}
               fullWidth
-              mt={34}
+              mt={32}
+              h={40}
+              size="sm"
             >
-              Sign Up
+              Create Account
             </Button>
           </form>
         </Stack>
 
-        <Stack gap={34}>
-          <Button
-            component="a"
-            leftSection={<GoogleIcon />}
-            href={`${config.API_URL}/account/sign-in/google/auth`}
-            variant="outline"
-          >
-            Continue with Google
-          </Button>
-
+        <Stack gap={32}>
           <Group fz={16} justify="center" gap={12}>
             Have an account?
             <Link
