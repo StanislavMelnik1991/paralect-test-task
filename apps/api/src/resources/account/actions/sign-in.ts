@@ -42,7 +42,6 @@ async function validator(ctx: AppKoaContext<ValidatedData>, next: Next) {
 }
 
 async function handler(ctx: AppKoaContext<ValidatedData>) {
-  logger.info(`request href: ${ctx.request.href}`);
   const { user } = ctx.validatedData;
 
   await Promise.all([
