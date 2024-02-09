@@ -12,5 +12,6 @@ export default TextInput.extend({
       [classes.inputError]: props.error,
     }),
     label: classes.label,
+    error: classes.error,
   }),
 });

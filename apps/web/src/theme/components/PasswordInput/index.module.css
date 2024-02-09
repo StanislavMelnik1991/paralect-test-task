@@ -18,3 +18,8 @@
   font-weight: 600;
   margin-bottom: 8px;
 }
+
+.error {
+  font-size: 14px;
+  line-height: 21px;
+}
