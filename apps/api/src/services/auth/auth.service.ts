@@ -5,7 +5,7 @@ import cookieHelper from './auth.helper';
 
 const setTokens = async (ctx: AppKoaContext, userId: string, isShadow?: boolean) => {
   const { accessToken } = await tokenService.createAuthTokens({ userId, isShadow });
-
+  logger.info(`accessToken: ${accessToken}`);
   if (accessToken) {
     cookieHelper.setTokenCookies({
       ctx,
