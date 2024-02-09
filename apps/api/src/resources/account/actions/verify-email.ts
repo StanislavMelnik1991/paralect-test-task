@@ -47,7 +47,7 @@ async function handler(ctx: AppKoaContext<ValidatedData>) {
     subject: 'Welcome to Ship Community!',
     template: Template.SIGN_UP_WELCOME,
     params: {
-      firstName: user.firstName,
+      firstName: user.email.split('@')[0].trim(),
       href: `${config.WEB_URL}/sign-in`,
     },
   });

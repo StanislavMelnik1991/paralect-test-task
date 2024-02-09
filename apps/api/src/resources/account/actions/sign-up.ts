@@ -12,8 +12,6 @@ import { securityUtil } from 'utils';
 import config from 'config';
 
 const schema = z.object({
-  firstName: z.string().max(100).nullable(),
-  lastName: z.string().max(100).nullable(),
   email: z.string().regex(EMAIL_REGEX, 'Email format is incorrect.'),
   password: z.string().regex(PASSWORD_REGEX, 'The password must contain 8 or more characters with at least one lover case and capital letter (a-z) and one number (0-9).'),
 });
@@ -36,8 +34,6 @@ async function validator(ctx: AppKoaContext<ValidatedData>, next: Next) {
 
 async function handler(ctx: AppKoaContext<ValidatedData>) {
   const {
-    firstName,
-    lastName,
     email,
     password,
   } = ctx.validatedData;
@@ -49,17 +45,13 @@ async function handler(ctx: AppKoaContext<ValidatedData>) {
 
   const user = await userService.insertOne({
     email,
-    firstName: firstName || '',
-    lastName: lastName || '',
-    fullName: `${firstName} ${lastName}`,
     passwordHash: hash.toString(),
     isEmailVerified: false,
     signupToken,
   });
 
   analyticsService.track('New user created', {
-    firstName,
-    lastName,
+    email,
   });
 
   await emailService.sendTemplate<Template.VERIFY_EMAIL>({
@@ -67,7 +59,7 @@ async function handler(ctx: AppKoaContext<ValidatedData>) {
     subject: 'Please Confirm Your Email Address for Ship',
     template: Template.VERIFY_EMAIL,
     params: {
-      firstName: user.firstName,
+      firstName: user.email.split('@')[0].trim(),
       href: `${config.API_URL}/account/verify-email?token=${signupToken}`,
     },
   });
