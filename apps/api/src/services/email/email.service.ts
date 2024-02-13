@@ -47,7 +47,7 @@ class EmailService {
 export default new EmailService({
   apiKey: config.SENDGRID_API_KEY,
   from: {
-    email: 'notifications@ship.com',
-    name: 'Ship',
+    email: 'notifications@ship.cloudns.be',
+    name: 'no-replay',
   },
 });

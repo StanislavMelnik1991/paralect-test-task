@@ -22,6 +22,7 @@ const layoutToComponent = {
 const scopeToComponent = {
   [ScopeType.PUBLIC]: Fragment,
   [ScopeType.PRIVATE]: PrivateScope,
+  [ScopeType.UNAUTHORIZED]: Fragment,
 };
 
 interface PageConfigProps {
@@ -51,7 +52,7 @@ const PageConfig: FC<PageConfigProps> = ({ children }) => {
     return null;
   }
 
-  if (scope === ScopeType.PUBLIC && account) {
+  if (scope === ScopeType.UNAUTHORIZED && account) {
     push(RoutePath.Home);
     return null;
   }

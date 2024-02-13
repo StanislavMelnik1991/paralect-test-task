@@ -6,6 +6,7 @@ import { configUtil } from 'utils';
  * Specify your environment variables schema here.
  * This way you can ensure the app isn't built with invalid env vars.
  */
+
 const schema = z.object({
   APP_ENV: z.enum(['development', 'staging', 'production']).default('development'),
   IS_DEV: z.preprocess(() => process.env.APP_ENV === 'development', z.boolean()),

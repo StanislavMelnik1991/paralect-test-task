@@ -12,16 +12,18 @@ import {
   Container,
   UnstyledButton,
   Flex,
+  Button,
 } from '@mantine/core';
 import { useDebouncedValue, useInputState } from '@mantine/hooks';
 import { IconSearch, IconX, IconSelector } from '@tabler/icons-react';
 import { RowSelectionState, SortingState } from '@tanstack/react-table';
 import { DatePickerInput, DatesRangeValue } from '@mantine/dates';
 
-import { userApi } from 'resources/user';
+import { productApi } from 'resources/products';
 
 import { Table } from 'components';
 
+import { toast } from 'react-toastify';
 import { PER_PAGE, columns, selectOptions } from './constants';
 
 import classes from './index.module.css';
@@ -51,6 +53,8 @@ const Home: NextPage = () => {
   const [params, setParams] = useState<UsersListParams>({});
 
   const [debouncedSearch] = useDebouncedValue(search, 500);
+
+  const { mutate: createProduct } = productApi.useCreate();
 
   const handleSort = useCallback((value: string) => {
     setSortBy(value);
@@ -82,7 +86,23 @@ const Home: NextPage = () => {
     setParams((prev) => ({ ...prev, page: 1, searchValue: debouncedSearch, perPage: PER_PAGE }));
   }, [debouncedSearch]);
 
-  const { data, isLoading: isListLoading } = userApi.useList(params);
+  const { data, isLoading: isListLoading } = productApi.useList(params);
+
+  const create = () => {
+    const body = {
+      name: 'test name',
+      price: 100,
+      quantity: 1,
+    };
+
+    createProduct(
+      body,
+      {
+        onSuccess: (val) => { toast(`${val.name} created`); },
+        onError: () => { toast.error('error'); },
+      },
+    );
+  };
 
   return (
     <>
@@ -91,6 +111,7 @@ const Home: NextPage = () => {
       </Head>
       <Stack gap="lg">
         <Title order={2}>Users</Title>
+        <Button onClick={create}>create</Button>
 
         <Group wrap="nowrap" justify="space-between">
           <Group wrap="nowrap">

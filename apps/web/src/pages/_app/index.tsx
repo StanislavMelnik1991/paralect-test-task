@@ -6,7 +6,11 @@ import { AppProps } from 'next/app';
 import { MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import { ModalsProvider } from '@mantine/modals';
+
 import '@mantine/core/styles.css';
+import 'react-toastify/dist/ReactToastify.css';
+
+import { ToastContainer } from 'react-toastify';
 
 import queryClient from 'query-client';
 import mainTheme from 'theme/main-theme';
@@ -26,7 +30,10 @@ const App: FC<AppProps> = ({ Component, pageProps }) => (
           <Notifications autoClose={10000} />
 
           <PageConfig>
-            <Component {...pageProps} />
+            <>
+              <ToastContainer />
+              <Component {...pageProps} />
+            </>
           </PageConfig>
         </ModalsProvider>
         <ReactQueryDevtools position="bottom-right" />

@@ -7,7 +7,6 @@ export const userSchema = dbSchema.extend({
   passwordHash: z.string().nullable().optional(),
 
   isEmailVerified: z.boolean().default(false),
-  isShadow: z.boolean().optional().nullable(),
 
   signupToken: z.string().nullable().optional(),
   resetPasswordToken: z.string().nullable().optional(),
@@ -16,6 +15,14 @@ export const userSchema = dbSchema.extend({
   oauth: z.object({
     google: z.boolean().default(false),
   }).optional(),
+
+  baskets: z.array(dbSchema.extend({
+    isPaid: z.boolean().default(false),
+    products: z.array(z.object({
+      productId: z.string(),
+      quantity: z.number().min(1).default(1),
+    })),
+  })).optional(),
 
   lastRequest: z.date().optional(),
 }).strict();

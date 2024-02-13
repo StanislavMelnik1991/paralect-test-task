@@ -1,6 +1,7 @@
 export enum ScopeType {
   PUBLIC = 'PUBLIC',
   PRIVATE = 'PRIVATE',
+  UNAUTHORIZED = 'UNAUTHORIZED',
 }
 
 export enum LayoutType {
@@ -33,7 +34,7 @@ type RoutesConfiguration = {
 export const routesConfiguration: RoutesConfiguration = {
   // Private routes
   [RoutePath.Home]: {
-    scope: ScopeType.PRIVATE,
+    scope: ScopeType.PUBLIC,
     layout: LayoutType.MAIN,
   },
   [RoutePath.Profile]: {
@@ -43,23 +44,23 @@ export const routesConfiguration: RoutesConfiguration = {
 
   // Auth routes
   [RoutePath.SignIn]: {
-    scope: ScopeType.PUBLIC,
+    scope: ScopeType.UNAUTHORIZED,
     layout: LayoutType.UNAUTHORIZED,
   },
   [RoutePath.SignUp]: {
-    scope: ScopeType.PUBLIC,
+    scope: ScopeType.UNAUTHORIZED,
     layout: LayoutType.UNAUTHORIZED,
   },
   [RoutePath.ForgotPassword]: {
-    scope: ScopeType.PUBLIC,
+    scope: ScopeType.UNAUTHORIZED,
     layout: LayoutType.UNAUTHORIZED,
   },
   [RoutePath.ResetPassword]: {
-    scope: ScopeType.PUBLIC,
+    scope: ScopeType.UNAUTHORIZED,
     layout: LayoutType.UNAUTHORIZED,
   },
   [RoutePath.ExpireToken]: {
-    scope: ScopeType.PUBLIC,
+    scope: ScopeType.UNAUTHORIZED,
     layout: LayoutType.UNAUTHORIZED,
   },
 

@@ -5,6 +5,8 @@ import { User } from 'types';
 import { apiService } from 'services';
 
 import queryClient from 'query-client';
+import { useRouter } from 'next/router';
+import { RoutePath } from 'routes';
 
 export function useSignIn<T>() {
   const signIn = (data: T) => apiService.post('/account/sign-in', data);
@@ -17,11 +19,13 @@ export function useSignIn<T>() {
 }
 
 export function useSignOut() {
+  const { push } = useRouter();
   const signOut = () => apiService.post('/account/sign-out');
 
   return useMutation(signOut, {
     onSuccess: () => {
       queryClient.setQueryData(['account'], null);
+      push(RoutePath.SignIn);
     },
   });
 }
@@ -54,7 +58,7 @@ export function useResendEmail<T>() {
   return useMutation<{}, unknown, T>(resendEmail);
 }
 
-export function useGet(options? : {}) {
+export function useGet(options?: {}) {
   const get = () => apiService.get('/account');
 
   return useQuery<User>(['account'], get, options);

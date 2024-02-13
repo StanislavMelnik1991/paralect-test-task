@@ -8,7 +8,6 @@ import { User } from './user.types';
 export type AppKoaContextState = {
   user: User;
   accessToken: string;
-  isShadow: boolean | null;
 };
 
 export type CustomErrors = {
