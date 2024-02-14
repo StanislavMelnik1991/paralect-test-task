@@ -31,6 +31,8 @@
     "app-constants": "workspace:*",
     "bcryptjs": "2.4.3",
     "dotenv": "16.0.3",
+    "firebase": "10.8.0",
+    "firebase-admin": "12.0.0",
     "google-auth-library": "8.7.0",
     "koa": "2.14.1",
     "koa-bodyparser": "4.3.0",

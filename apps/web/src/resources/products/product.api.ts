@@ -20,7 +20,7 @@ export function useList<T>(params: T) {
 export function useCreate<T>() {
   const createProduct = (data: T) => apiService.post('/me/products', data);
 
-  return useMutation<Product, unknown, T>(createProduct, {
+  return useMutation<{ product: Product }, unknown, T>(createProduct, {
     onSuccess: (data) => {
       queryClient.setQueryData(['product'], data);
     },

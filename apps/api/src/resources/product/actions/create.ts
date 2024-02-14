@@ -24,9 +24,6 @@ async function handler(ctx: AppKoaContext<ValidatedData>) {
   const { _id: createdBy } = ctx.state.user;
   const { name, price, quantity, image } = ctx.validatedData;
 
-  //todo: delete
-  logger.info(`New product created by ${createdBy}`);
-
   const product = await productService.insertOne({
     createdBy,
     name,

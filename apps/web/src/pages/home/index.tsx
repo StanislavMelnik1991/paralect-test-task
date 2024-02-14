@@ -98,7 +98,10 @@ const Home: NextPage = () => {
     createProduct(
       body,
       {
-        onSuccess: (val) => { toast(`${val.name} created`); },
+        onSuccess: (val) => {
+          console.log(val);
+          toast(`${val.product.name} created`);
+        },
         onError: () => { toast.error('error'); },
       },
     );
