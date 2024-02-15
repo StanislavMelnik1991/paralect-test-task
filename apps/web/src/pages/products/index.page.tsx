@@ -13,10 +13,10 @@ import {
   UnstyledButton,
   Flex,
   Button,
-  Grid,
   Card,
   Image,
   Badge,
+  Grid,
 } from '@mantine/core';
 import { useDebouncedValue, useInputState } from '@mantine/hooks';
 import { IconSearch, IconX, IconSelector } from '@tabler/icons-react';
@@ -47,6 +47,8 @@ interface UsersListParams {
 
 const Home: NextPage = () => {
   const [search, setSearch] = useInputState('');
+  // const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+  // const [sorting, setSorting] = useState<SortingState>([]);
   const [sortBy, setSortBy] = useState(selectOptions[0].value);
   const [filterDate, setFilterDate] = useState<DatesRangeValue>();
 
@@ -84,7 +86,7 @@ const Home: NextPage = () => {
     setParams((prev) => ({ ...prev, page: 1, searchValue: debouncedSearch, perPage: PER_PAGE }));
   }, [debouncedSearch]);
 
-  const { data, isLoading: isListLoading } = productApi.useList(params);
+  const { data, isLoading: isListLoading } = productApi.useMyList(params);
 
   return (
     <>
@@ -93,8 +95,8 @@ const Home: NextPage = () => {
       </Head>
       <Stack gap="lg">
         <Title order={2}>Users</Title>
-        <Link href={RoutePath.Products}>
-          <Button>My products</Button>
+        <Link href={RoutePath.CreateProduct}>
+          <Button>create</Button>
         </Link>
 
         <Group wrap="nowrap" justify="space-between">

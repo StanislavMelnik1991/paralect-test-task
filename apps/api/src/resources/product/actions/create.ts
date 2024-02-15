@@ -6,22 +6,22 @@ import { productService } from 'resources/product';
 
 import { validateMiddleware } from 'middlewares';
 import { analyticsService } from 'services';
+import { firebaseService } from 'services';
 
 const schema = z.object({
   name: z.string(),
-  price: z.number().min(1).max(256),
-  quantity: z.number().min(1).max(256),
-  image: z.string().optional(),
+  price: z.number().min(1),
+  quantity: z.number().min(1),
+  image: z.string().url(),
 });
 
 interface ValidatedData extends z.infer<typeof schema> {
-  user: Product;
+  product: Product;
 }
 
 
 async function handler(ctx: AppKoaContext<ValidatedData>) {
-
-  const { _id: createdBy } = ctx.state.user;
+  const { _id: createdBy, email } = ctx.state.user;
   const { name, price, quantity, image } = ctx.validatedData;
 
   const product = await productService.insertOne({
@@ -29,14 +29,19 @@ async function handler(ctx: AppKoaContext<ValidatedData>) {
     name,
     price,
     quantity,
-    image,
   });
+  
+  const fileName = await firebaseService.rename(image, `${email}/products/${name}-${product._id}`);
+  const updatedUser = await productService.updateOne(
+    { _id: product._id },
+    () => ({ image: fileName }),
+  );
 
   analyticsService.track('New product created', {
     name,
   });
 
-  ctx.body = { product };
+  ctx.body = { product: updatedUser };
 }
 
 export default (router: AppRouter) => {

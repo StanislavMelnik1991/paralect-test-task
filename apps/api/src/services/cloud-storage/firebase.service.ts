@@ -24,6 +24,19 @@ class Firebase {
     return getDownloadURL(loadedFile);
   }
 
+  async rename(oldUrl: string, newName: string) {
+    const oldName = this.parseUrl(oldUrl);
+    const bucket = getStorage(this.app).bucket();
+    const oldFile = bucket.file(oldName);
+    const newFile = bucket.file(newName);
+    const loadedFile = await oldFile.download();
+    await Promise.all([
+      newFile.save(loadedFile),
+      oldFile.delete(),
+    ]);
+    return getDownloadURL(newFile);
+  }
+
   async deleteObject(url?: string | null) {
     if (!url) {
       return;
