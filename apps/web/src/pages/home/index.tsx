@@ -182,7 +182,7 @@ const Home: NextPage = () => {
         )}
 
         {data?.items.length ? (
-          <Grid grow>
+          <Grid>
             {data.items.map((product) => (
               <Grid.Col span={4} key={product._id}>
                 <Card shadow="sm" padding="lg" radius="md" withBorder>

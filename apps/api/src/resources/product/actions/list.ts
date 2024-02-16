@@ -33,6 +33,7 @@ async function handler(ctx: AppKoaContext<ValidatedData>) {
 
   const products = await productService.find(
     {
+      isSold: false,
       $and: [
         {
           $or: [

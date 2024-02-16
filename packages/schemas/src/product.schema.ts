@@ -9,6 +9,5 @@ export const productSchema = dbSchema.extend({
   image: z.string().optional(),
 
   price: z.number(),
-  quantity: z.number().default(1),
-  remain: z.number().default(0),
+  isSold: z.boolean().default(false),
 }).strict();

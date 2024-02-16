@@ -184,7 +184,7 @@ const Home: NextPage = () => {
         )}
 
         {data?.items.length ? (
-          <Grid grow>
+          <Grid>
             {data.items.map((product) => (
               <Grid.Col span={4} key={product._id}>
                 <Card shadow="sm" padding="lg" radius="md" withBorder>
@@ -196,10 +196,12 @@ const Home: NextPage = () => {
                     />
                   </Card.Section>
 
-                  <Text fw="bold">{product.name}</Text>
-
                   <Group justify="space-between" mt="md" mb="xs">
-                    <Badge color="gray">Price: </Badge>
+                    <Text fw="bold">{product.name}</Text>
+                    {product.isSold && <Badge color="green">Sold</Badge>}
+                  </Group>
+                  <Group justify="space-between" mt="md" mb="xs">
+                    <Text>Price: </Text>
                     <Text fw="bold">{`$${product.price}`}</Text>
                   </Group>
 
