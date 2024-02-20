@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { AppKoaContext, AppRouter, Product } from 'types';
+import { AppKoaContext, AppRouter } from 'types';
 
 import { cartService } from 'resources/cart';
 import { productService } from 'resources/product';
@@ -10,32 +10,46 @@ import { analyticsService } from 'services';
 
 const schema = z.object({
   productId: z.string(),
+  quantity: z.number().optional().default(1),
 });
 
-interface ValidatedData extends z.infer<typeof schema> {
-  product: Product;
-}
+type ValidatedData = z.infer<typeof schema>;
 
 async function handler(ctx: AppKoaContext<ValidatedData>) {
   const { _id: userId } = ctx.state.user;
-  const { productId } = ctx.validatedData;
+  const { productId, quantity } = ctx.validatedData;
 
   const product = await productService.findOne({
     _id: productId,
   });
   const cart = await cartService.findOne({ userId, isPaid: false });
 
-  ctx.assertClientError(product && !product.isSold, {
+  ctx.assertClientError(product && product.quantity >= 0, {
     credentials: 'Product not found',
   });
 
+  ctx.assertClientError(product.quantity >= quantity, {
+    credentials: 'Not enough quantity',
+  });
+
+  await productService.updateOne(
+    { _id: productId },
+    () => ({
+      quantity: product.quantity - quantity,
+      pending: product.pending + quantity,
+    }),
+  );
   if (!cart) {
-    const newCart = await cartService.insertOne({ userId, isPaid: false, products: [{ productId }] });
+    const newCart = await cartService.insertOne({ userId, isPaid: false, products: [{ productId, quantity }] });
     ctx.body = { cart: newCart };
     return;
   }
-
-  cart.products.push({ productId });
+  const existed = cart.products.find((val) => val.productId === productId);
+  if (existed) {
+    existed.quantity += quantity;
+  } else {
+    cart.products.push({ productId, quantity });
+  }
   await cartService.updateOne(
     { _id: cart._id },
     () => (cart),

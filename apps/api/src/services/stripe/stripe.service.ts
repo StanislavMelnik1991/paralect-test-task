@@ -16,19 +16,23 @@ export class StripeService {
   }:
   {
     cartId: string,
-    products: Array<{ id: string, price: number, name: string }>,
+    products: Array<{ 
+      price: number, 
+      name: string, 
+      quantity: number 
+    }>,
   }) {
     /* const amount = products.reduce((total, product) => total + product.price, 0); */
-    const lineItems: Array<Stripe.Checkout.SessionCreateParams.LineItem> = products.map((el) => {
+    const lineItems: Array<Stripe.Checkout.SessionCreateParams.LineItem> = products.map(({ name, price, quantity }) => {
       return {
         price_data: {
           currency: 'usd',
           product_data: {
-            name: el.name,
+            name: name,
           },
-          unit_amount: el.price * 100,
+          unit_amount: price * 100,
         },
-        quantity: 1,
+        quantity: quantity,
       };
     });
     const session = await this.stripe.checkout.sessions.create({

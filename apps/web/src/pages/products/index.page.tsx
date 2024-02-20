@@ -198,7 +198,7 @@ const Home: NextPage = () => {
 
                   <Group justify="space-between" mt="md" mb="xs">
                     <Text fw="bold">{product.name}</Text>
-                    {product.isSold && <Badge color="green">Sold</Badge>}
+                    {product.quantity === 0 && <Badge color="green">Sold</Badge>}
                   </Group>
                   <Group justify="space-between" mt="md" mb="xs">
                     <Text>Price: </Text>

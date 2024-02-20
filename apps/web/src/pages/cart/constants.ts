@@ -12,6 +12,10 @@ export const columns: ColumnDef<Product>[] = [
     cell: (info) => info.getValue(),
   },
   {
+    accessorKey: 'quantity',
+    header: 'Quantity',
+  },
+  {
     accessorKey: 'name',
     header: 'Product',
   },

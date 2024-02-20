@@ -20,6 +20,7 @@ import classes from './index.module.css';
 const schema = z.object({
   name: z.string().min(3).max(256),
   price: z.number().min(0),
+  quantity: z.number().min(1),
   image: z.string().url(),
 });
 
@@ -30,6 +31,7 @@ const Profile: NextPage = () => {
   const [name, setName] = useState('');
   const [image, setImage] = useState('');
   const [price, setPrice] = useState('');
+  const [quantity, setQuantity] = useState('');
 
   const {
     register,
@@ -102,6 +104,25 @@ const Profile: NextPage = () => {
               }}
               error={errors.price?.message}
             />
+            <TextInput
+              {...register('quantity')}
+              label="Quantity"
+              placeholder="Enter price of the product"
+              labelProps={{
+                'data-invalid': !!errors.quantity,
+              }}
+              value={quantity}
+              onChange={(ev) => {
+                const val = Number(ev.target.value);
+                if (!ev.target.value) {
+                  setQuantity('');
+                }
+                if (!Number.isNaN(val)) {
+                  setQuantity(ev.target.value);
+                }
+              }}
+              error={errors.price?.message}
+            />
           </Stack>
 
           <Button
@@ -112,6 +133,7 @@ const Profile: NextPage = () => {
                   name,
                   price: Number(price),
                   image,
+                  quantity: Number(quantity),
                 });
               }
             }

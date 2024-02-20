@@ -5,8 +5,6 @@ import { productService } from 'resources/product';
 
 import { analyticsService, stripeService } from 'services';
 
-
-
 async function handler(ctx: AppKoaContext) {
   const { _id: userId } = ctx.state.user;
 
@@ -15,12 +13,12 @@ async function handler(ctx: AppKoaContext) {
   ctx.assertClientError(cart && cart.products.length, {
     credentials: 'Cart not found',
   });
-  const products = await Promise.all(cart.products.map(async ({ productId }) => {
+  const products = await Promise.all(cart.products.map(async ({ productId, quantity }) => {
     const product = await productService.findOne({ _id: productId });
     ctx.assertClientError(product, {
       credentials: 'Product not found',
     });
-    return { id: productId, price: product.price as number, name: product.name };
+    return { price: product.price as number, name: product.name, quantity };
   }));
   const { url } = await stripeService.createPaymentLink({ cartId: cart._id, products });
 

@@ -15,9 +15,7 @@ const schema = z.object({
   }),
 });
 
-interface ValidatedData extends z.infer<typeof schema> {
-  received: boolean;
-}
+type ValidatedData = z.infer<typeof schema>;
 
 async function handler(ctx: AppKoaContext<ValidatedData>) {
   const { type, data: { object } } = ctx.validatedData;

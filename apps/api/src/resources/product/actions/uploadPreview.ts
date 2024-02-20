@@ -4,7 +4,6 @@ import { Next, AppKoaContext, AppRouter } from 'types';
 
 import { firebaseService } from 'services';
 
-
 const upload = multer();
 
 async function validator(ctx: AppKoaContext, next: Next) {

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { AppKoaContext, AppRouter, Product } from 'types';
+import { AppKoaContext, AppRouter } from 'types';
 
 import { productService } from 'resources/product';
 
@@ -11,23 +11,23 @@ import { firebaseService } from 'services';
 const schema = z.object({
   name: z.string(),
   price: z.number().min(1),
+  quantity: z.number().min(1).optional().default(1),
   image: z.string().url(),
 });
 
-interface ValidatedData extends z.infer<typeof schema> {
-  product: Product;
-}
+type ValidatedData = z.infer<typeof schema>;
 
 
 async function handler(ctx: AppKoaContext<ValidatedData>) {
   const { _id: createdBy, email } = ctx.state.user;
-  const { name, price, image } = ctx.validatedData;
+  const { name, price, image, quantity } = ctx.validatedData;
 
   const product = await productService.insertOne({
     createdBy,
     name,
     price,
-    isSold: false,
+    quantity,
+    sold: 0,
   });
   
   const fileName = await firebaseService.rename(image, `${email}/products/${name}-${product._id}`);
