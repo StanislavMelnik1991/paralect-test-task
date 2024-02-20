@@ -1,4 +1,4 @@
-import { MouseEventHandler, useCallback, useLayoutEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import Head from 'next/head';
 import { NextPage } from 'next';
 import {
@@ -12,100 +12,48 @@ import {
   Container,
   UnstyledButton,
   Flex,
-  Button,
-  Grid,
-  Card,
   Image,
-  Badge,
+  Button,
 } from '@mantine/core';
-import { useDebouncedValue, useInputState } from '@mantine/hooks';
+import { useInputState } from '@mantine/hooks';
 import { IconSearch, IconX, IconSelector } from '@tabler/icons-react';
 import { DatePickerInput, DatesRangeValue } from '@mantine/dates';
 
 import { productApi } from 'resources/products';
 
-import Link from 'next/link';
-import { RoutePath } from 'routes';
-import { accountApi } from 'resources/account';
-import { z } from 'zod';
-import { toast } from 'react-toastify';
-import { Product } from 'types';
-import { PER_PAGE, selectOptions } from './constants';
+import { Table } from 'components';
+import { RowSelectionState, SortingState } from '@tanstack/react-table';
+import { useRouter } from 'next/router';
+import { PER_PAGE, columns, selectOptions } from './constants';
 
 import classes from './index.module.css';
 
-interface UsersListParams {
-  page?: number;
-  perPage?: number;
-  searchValue?: string;
-  sort?: {
-    createdOn: 'asc' | 'desc';
-  };
-  filter?: {
-    createdOn?: {
-      sinceDate: Date | null;
-      dueDate: Date | null;
-    };
-  };
-}
-
-const schema = z.object({
-  productId: z.string(),
-});
-
-type AddToCartParams = z.infer<typeof schema>;
-
 const Home: NextPage = () => {
-  const { data: account } = accountApi.useGet();
+  const router = useRouter();
   const [search, setSearch] = useInputState('');
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+  const [sorting, setSorting] = useState<SortingState>([]);
   const [sortBy, setSortBy] = useState(selectOptions[0].value);
   const [filterDate, setFilterDate] = useState<DatesRangeValue>();
-  const { mutate: addToCart } = productApi.useAddToCart<AddToCartParams>();
-
-  const [params, setParams] = useState<UsersListParams>({});
-
-  const [debouncedSearch] = useDebouncedValue(search, 500);
 
   const handleSort = useCallback((value: string) => {
     setSortBy(value);
-    setParams((prev) => ({
-      ...prev,
-      sort: value === 'newest' ? { createdOn: 'desc' } : { createdOn: 'asc' },
-    }));
   }, []);
 
   const handleFilter = useCallback(([sinceDate, dueDate]: DatesRangeValue) => {
     setFilterDate([sinceDate, dueDate]);
-
-    if (!sinceDate) {
-      setParams((prev) => ({
-        ...prev,
-        filter: {},
-      }));
-    }
-
-    if (dueDate) {
-      setParams((prev) => ({
-        ...prev,
-        filter: { createdOn: { sinceDate, dueDate } },
-      }));
-    }
   }, []);
 
-  useLayoutEffect(() => {
-    setParams((prev) => ({ ...prev, page: 1, searchValue: debouncedSearch, perPage: PER_PAGE }));
-  }, [debouncedSearch]);
+  const { data, isLoading: isListLoading } = productApi.useMyCart();
+  const { isLoading: isBueLoading, mutate } = productApi.useBue();
 
-  const { data, isLoading: isListLoading } = productApi.useList(params);
-
-  type ClickHandler = (data: Product) => MouseEventHandler<HTMLButtonElement>;
-  const handleAddToCart: ClickHandler = useCallback((product) => () => {
-    addToCart({ productId: product._id }, {
-      onSuccess: () => {
-        toast(`${product.name} has been added to your cart`);
-      },
+  const handleBue = useCallback(() => {
+    mutate(undefined, {
+      onSuccess: (({ link }) => {
+        router.push(link);
+      }),
     });
-  }, [addToCart]);
+  }, [mutate, router]);
 
   return (
     <>
@@ -113,11 +61,7 @@ const Home: NextPage = () => {
         <title>Home</title>
       </Head>
       <Stack gap="lg">
-        <Title order={2}>Users</Title>
-        <Link href={RoutePath.Products}>
-          <Button>My products</Button>
-        </Link>
-
+        <Title order={2}>My cart</Title>
         <Group wrap="nowrap" justify="space-between">
           <Group wrap="nowrap">
             <Skeleton
@@ -203,32 +147,28 @@ const Home: NextPage = () => {
         )}
 
         {data?.items.length ? (
-          <Grid>
-            {data.items.map((product) => (
-              <Grid.Col span={4} key={product._id}>
-                <Card shadow="sm" padding="lg" radius="md" withBorder>
-                  <Card.Section>
-                    <Image
-                      src={product.image}
-                      height={220}
-                      alt="Norway"
-                    />
-                  </Card.Section>
-
-                  <Text fw="bold">{product.name}</Text>
-
-                  <Group justify="space-between" mt="md" mb="xs">
-                    <Badge color="gray">Price: </Badge>
-                    <Text fw="bold">{`$${product.price}`}</Text>
+          <>
+            <Table
+              columns={columns}
+              data={data.items.map((el) => ({
+                ...el,
+                price: `$${el.price}`,
+                image: (
+                  <Group wrap="nowrap">
+                    <Image w={80} h={80} src={el.image} />
+                    <Text>{el.name}</Text>
                   </Group>
-
-                  <Button onClick={handleAddToCart(product)} size="sm" color="blue" fullWidth disabled={!account}>
-                    Add to Cart
-                  </Button>
-                </Card>
-              </Grid.Col>
-            ))}
-          </Grid>
+                ),
+              }))}
+              dataCount={data.count}
+              rowSelection={rowSelection}
+              setRowSelection={setRowSelection}
+              sorting={sorting}
+              onSortingChange={setSorting}
+              perPage={PER_PAGE}
+            />
+            <Button onClick={handleBue} loading={isBueLoading}>bue</Button>
+          </>
         ) : (
           <Container p={75}>
             <Text size="xl" c="gray">

@@ -4,7 +4,7 @@ import { getStorage, getDownloadURL } from 'firebase-admin/storage';
 import type { File } from '@koa/multer';
 import config from 'config';
 
-class Firebase {
+export class FirebaseService {
   app: App;
 
 
@@ -59,11 +59,3 @@ class Firebase {
     return decodeURIComponent(path);
   }
 }
-
-const { privateKey } = JSON.parse(process.env.FIREBASE_STORAGE_PRIVATE_KEY as string);
-
-export default new Firebase({
-  clientEmail: config.FIREBASE_STORAGE_CLIENT_EMAIL,
-  privateKey,
-  projectId: config.FIREBASE_STORAGE_PROJECT_ID,
-});

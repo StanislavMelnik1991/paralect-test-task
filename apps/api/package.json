@@ -9,7 +9,7 @@
     "test": "run-s test:**",
     "test:lint": "tsc --noEmit && eslint \"**/*.{js,ts}\" --quiet --fix",
     "test:unit": "jest --runInBand -c ./jest.config.ts --collectCoverage false",
-    "dev": "NODE_ENV=development APP_ENV=development ts-node-dev --respawn --transpile-only src/app.ts",
+    "dev": "set NODE_ENV=development&& set APP_ENV=development&& ts-node-dev --respawn --transpile-only src/app.ts",
     "start": "ts-node src/app.ts",
     "migrate-dev": "NODE_ENV=development APP_ENV=development ts-node src/migrator.ts",
     "migrate": "ts-node src/migrator.ts",
@@ -54,6 +54,7 @@
     "redis": "4.6.5",
     "schemas": "workspace:*",
     "socket.io": "4.6.1",
+    "stripe": "14.17.0",
     "types": "workspace:*",
     "winston": "3.8.2",
     "zod": "3.21.4"

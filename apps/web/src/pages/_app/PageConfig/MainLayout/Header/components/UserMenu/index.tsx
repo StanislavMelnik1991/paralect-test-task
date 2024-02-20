@@ -27,6 +27,13 @@ const UserMenu: FC = () => {
         >
           Profile settings
         </Menu.Item>
+        <Menu.Item
+          component={Link}
+          href={RoutePath.Cart}
+          leftSection={<IconUserCircle size={16} />}
+        >
+          My cart
+        </Menu.Item>
 
         <Menu.Item
           onClick={() => signOut()}

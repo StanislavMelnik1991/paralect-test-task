@@ -16,13 +16,5 @@ export const userSchema = dbSchema.extend({
     google: z.boolean().default(false),
   }).optional(),
 
-  baskets: z.array(dbSchema.extend({
-    isPaid: z.boolean().default(false),
-    products: z.array(z.object({
-      productId: z.string(),
-      quantity: z.number().min(1).default(1),
-    })),
-  })).optional(),
-
   lastRequest: z.date().optional(),
 }).strict();

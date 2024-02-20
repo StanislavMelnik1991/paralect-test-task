@@ -16,6 +16,8 @@ const schema = z.object({
   REDIS_URI: z.string(),
   API_URL: z.string(),
   WEB_URL: z.string(),
+  STRIPE_SECRET_KEY: z.string(),
+  STRIPE_PUBLISH_KEY: z.string(),
   FIREBASE_STORAGE_BUCKET: z.string(),
   FIREBASE_STORAGE_CLIENT_EMAIL: z.any(),
   FIREBASE_STORAGE_PRIVATE_KEY: z.string(),
