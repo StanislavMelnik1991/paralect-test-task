@@ -4,3 +4,5 @@ export { default as PasswordInput } from './PasswordInput';
 export { default as Select } from './Select';
 export { default as TextInput } from './TextInput';
 export { default as Checkbox } from './Checkbox';
+export { default as NavLink } from './NavLink';
+export { default as Pill } from './Pill';

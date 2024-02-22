@@ -1,0 +1,35 @@
+.root {
+  background-color: var(--mantine-color-white);
+  border: solid 1px;
+  border-color: var(--mantine-color-gray-3);
+  height: auto;
+  padding: 9.5px 20px;
+  display: inline-flex;
+  gap: 5px;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 17px;
+}
+
+.remove {
+  background-color: var(--mantine-color-gray-5);
+  border-radius: 50%;
+  min-width: 16px;
+  width: 16px;
+  height: 16px;
+  min-height: 16px;
+  padding: 0;
+  margin: 0;
+
+  >svg {
+    width: 16px;
+    height: 16px;
+
+    >path {
+      fill: var(--mantine-color-white);
+    }
+  }
+}

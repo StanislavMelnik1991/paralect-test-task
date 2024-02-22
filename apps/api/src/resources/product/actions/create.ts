@@ -8,9 +8,13 @@ import { validateMiddleware } from 'middlewares';
 import { analyticsService } from 'services';
 import { firebaseService } from 'services';
 
+const isRoundedToTwoDecimalPlaces = (value: number) => {
+  return Number(value.toFixed(2)) === value;
+};
+
 const schema = z.object({
   name: z.string(),
-  price: z.number().min(1),
+  price: z.number().min(1).refine(isRoundedToTwoDecimalPlaces),
   quantity: z.number().min(1).optional().default(1),
   image: z.string().url(),
 });

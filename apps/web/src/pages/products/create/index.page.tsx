@@ -19,41 +19,43 @@ import classes from './index.module.css';
 
 const schema = z.object({
   name: z.string().min(3).max(256),
-  price: z.number().min(0),
-  quantity: z.number().min(1),
-  image: z.string().url(),
+  price: z.string().transform(parseFloat),
+  quantity: z.string().transform(parseFloat),
 });
 
 type CreateParams = z.infer<typeof schema>;
 
 const Profile: NextPage = () => {
   const { push } = useRouter();
-  const [name, setName] = useState('');
   const [image, setImage] = useState('');
-  const [price, setPrice] = useState('');
-  const [quantity, setQuantity] = useState('');
 
   const {
     register,
+    handleSubmit,
     setError,
     formState: { errors },
   } = useForm<CreateParams>({
     resolver: zodResolver(schema),
-    defaultValues: {},
   });
 
   const {
     mutate: createProduct,
     isLoading: isUpdateLoading,
-  } = productApi.useCreate<CreateParams>();
+  } = productApi.useCreate<CreateParams & { image: string }>();
 
-  const onSubmit = (submitData: CreateParams) => createProduct(submitData, {
-    onSuccess: async (data) => {
-      toast(`${data.product.name} created`);
-      push(RoutePath.Products);
+  const onSubmit = (submitData: CreateParams) => createProduct(
+    {
+      ...submitData,
+      image,
     },
-    onError: (e) => handleError(e, setError),
-  });
+    {
+      onSuccess: async (data) => {
+        toast(`${data.product.name} created`);
+        push(RoutePath.Products);
+      },
+      onError: (e) => handleError(e, setError),
+    },
+  );
 
   return (
     <>
@@ -71,7 +73,7 @@ const Profile: NextPage = () => {
 
         <form
           className={classes.form}
-        /* onSubmit={handleSubmit(onSubmit)} */
+          onSubmit={handleSubmit(onSubmit)}
         >
           <Stack gap={20}>
             <TextInput
@@ -81,62 +83,39 @@ const Profile: NextPage = () => {
               labelProps={{
                 'data-invalid': !!errors.name,
               }}
-              value={name}
-              onChange={(ev) => setName(ev.target.value)}
               error={errors.name?.message}
             />
+            {/* <NumberInput
+              {...register('price')}
+              label="Price"
+              prefix="$"
+              placeholder="Enter price of the product"
+              decimalScale={2}
+            /> */}
             <TextInput
               {...register('price')}
               label="Price"
+              type="number"
               placeholder="Enter price of the product"
               labelProps={{
                 'data-invalid': !!errors.price,
-              }}
-              value={price}
-              onChange={(ev) => {
-                const val = Number(ev.target.value);
-                if (!ev.target.value) {
-                  setPrice('');
-                }
-                if (!Number.isNaN(val)) {
-                  setPrice(ev.target.value);
-                }
               }}
               error={errors.price?.message}
             />
             <TextInput
               {...register('quantity')}
+              type="number"
               label="Quantity"
               placeholder="Enter price of the product"
               labelProps={{
                 'data-invalid': !!errors.quantity,
               }}
-              value={quantity}
-              onChange={(ev) => {
-                const val = Number(ev.target.value);
-                if (!ev.target.value) {
-                  setQuantity('');
-                }
-                if (!Number.isNaN(val)) {
-                  setQuantity(ev.target.value);
-                }
-              }}
-              error={errors.price?.message}
+              error={errors.quantity?.message}
             />
           </Stack>
 
           <Button
-            type="button"
-            onClick={
-              () => {
-                onSubmit({
-                  name,
-                  price: Number(price),
-                  image,
-                  quantity: Number(quantity),
-                });
-              }
-            }
+            type="submit"
             loading={isUpdateLoading}
           >
             Create Product

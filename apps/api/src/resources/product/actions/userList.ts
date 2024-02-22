@@ -10,8 +10,9 @@ const schema = z.object({
   page: z.string().transform(Number).default('1'),
   perPage: z.string().transform(Number).default('10'),
   sort: z.object({
-    price: z.enum(['asc', 'desc']),
-  }).default({ price: 'desc' }),
+    createdOn: z.enum(['asc', 'desc']).optional(),
+    price: z.enum(['asc', 'desc']).optional(),
+  }).default({ createdOn: 'desc' }),
   filter: z.object({
     price: z.object({
       from: z.number(),

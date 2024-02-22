@@ -1,7 +1,3 @@
-.inputSkeleton {
-  flex-grow: 0.25
-}
-
-.datePickerSkeleton {
-  overflow: unset;
+.wrapper {
+  min-height: calc(100dvh - var(--app-shell-header-height) - 64px);
 }

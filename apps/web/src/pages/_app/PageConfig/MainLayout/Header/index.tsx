@@ -9,6 +9,7 @@ import { RoutePath } from 'routes';
 import { LogoImage } from 'public/images';
 
 import UserMenu from './components/UserMenu';
+import NavigationMenu from './components/Navigation';
 
 import classes from './index.module.css';
 
@@ -28,6 +29,7 @@ const Header: FC = () => {
         <Link type="router" href={RoutePath.Home}>
           <LogoImage />
         </Link>
+        <NavigationMenu />
         {
           account
             ? <UserMenu />
