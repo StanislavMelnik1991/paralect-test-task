@@ -39,7 +39,7 @@ const Home: NextPage = () => {
       <Head>
         <title>Home</title>
       </Head>
-      <Stack className={classes.wrapper}>
+      <Stack className={classes.wrapper} p="lg">
         <Grid w="100%" columns={4} gutter={28}>
           <Grid.Col span={1}>
             <Filters

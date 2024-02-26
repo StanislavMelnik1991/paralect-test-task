@@ -1,28 +1,34 @@
-import { Button, Card, Group, Text } from '@mantine/core';
+import { Box, Card, Group, Text } from '@mantine/core';
 import Image from 'next/image';
-import { type MouseEventHandler } from 'react';
 import { Product } from 'types';
 
 import classes from './index.module.css';
 
 type Props = {
   product: Product
-  handleAddToCart: (data: { id: string, name: string }) => MouseEventHandler<HTMLButtonElement>
-  disabled?: boolean
+  mainButton?: JSX.Element
+  secondaryButton?: JSX.Element
+  badge?: JSX.Element
 };
 
 export const ProductCard = ({
-  handleAddToCart,
   product: {
-    _id: id,
     image,
     name,
     price,
   },
-  disabled,
+  mainButton,
+  secondaryButton,
+  badge,
 }: Props) => (
-  <Card shadow="sm" padding="lg" radius="xl" withBorder>
-    <Card.Section>
+  <Card
+    h="100%"
+    shadow="sm"
+    padding="md"
+    radius="xl"
+    withBorder
+  >
+    <Card.Section pos="relative">
       <Image
         className={classes.image}
         src={image || ''}
@@ -31,17 +37,25 @@ export const ProductCard = ({
         height={0}
         sizes="100%"
       />
+      <Box pos="absolute" right={16} top={16}>
+        {secondaryButton}
+      </Box>
+      <Box pos="absolute" right={16} bottom={16}>
+        {badge}
+      </Box>
     </Card.Section>
 
     <Text truncate="end" mt={16} size="md" fw="bold">{name}</Text>
 
-    <Group justify="space-between" mt={13} mb={22}>
+    <Group justify="space-between" mt={13}>
       <Text c="A3A3A3" size="xs" fw="bold">Price: </Text>
       <Text fw="bold">{`$${price}`}</Text>
     </Group>
 
-    <Button onClick={handleAddToCart({ id, name })} size="sm" color="blue" fullWidth disabled={disabled}>
-      Add to Cart
-    </Button>
+    {mainButton && (
+    <Box mt={22}>
+      {mainButton}
+    </Box>
+    )}
   </Card>
 );

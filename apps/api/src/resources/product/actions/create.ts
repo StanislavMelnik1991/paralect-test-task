@@ -35,7 +35,7 @@ async function handler(ctx: AppKoaContext<ValidatedData>) {
   });
   
   const fileName = await firebaseService.rename(image, `${email}/products/${name}-${product._id}`);
-  const updatedUser = await productService.updateOne(
+  const updated = await productService.updateOne(
     { _id: product._id },
     () => ({ image: fileName }),
   );
@@ -44,7 +44,7 @@ async function handler(ctx: AppKoaContext<ValidatedData>) {
     name,
   });
 
-  ctx.body = { product: updatedUser };
+  ctx.body = { product: updated };
 }
 
 export default (router: AppRouter) => {

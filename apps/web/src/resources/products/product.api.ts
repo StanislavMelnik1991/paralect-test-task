@@ -5,26 +5,20 @@ import { Cart, Product } from 'types';
 import { apiService } from 'services';
 import queryClient from 'query-client';
 
+interface ProductsListResponse {
+  count: number;
+  items: Product[];
+  totalPages: number;
+}
+
 export function useList<T>(params: T) {
   const list = () => apiService.get('/products', params);
-
-  interface ProductsListResponse {
-    count: number;
-    items: Product[];
-    totalPages: number;
-  }
 
   return useQuery<ProductsListResponse>(['products', params], list);
 }
 
 export function useMyList<T>(params: T) {
   const list = () => apiService.get('/me/products', params) as Promise<ProductsListResponse>;
-
-  interface ProductsListResponse {
-    count: number;
-    items: Product[];
-    totalPages: number;
-  }
 
   return useQuery<ProductsListResponse>(['myProducts', params], list);
 }
@@ -33,8 +27,17 @@ export function useCreate<T>() {
   const createProduct = (data: T) => apiService.post('/me/products', data);
 
   return useMutation<{ product: Product }, unknown, T>(createProduct, {
-    onSuccess: (data) => {
-      queryClient.setQueryData(['product'], data);
+    onSuccess: () => {
+      queryClient.invalidateQueries('myProducts');
+    },
+  });
+}
+export function useDelete<T>() {
+  const createProduct = (data: T) => apiService.delete('/me/products', data);
+
+  return useMutation<{ product: Product }, unknown, T>(createProduct, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('myProducts');
     },
   });
 }
@@ -43,8 +46,8 @@ export function useAddToCart<T>() {
   const createProduct = (data: T) => apiService.post('/me/cart', data);
 
   return useMutation<{ cart: Cart }, unknown, T>(createProduct, {
-    onSuccess: (data) => {
-      queryClient.setQueryData(['cart'], data);
+    onSuccess: () => {
+      queryClient.invalidateQueries('products');
     },
   });
 }
@@ -76,9 +79,5 @@ export function useBue() {
 
   interface MyCart { link: string, }
 
-  return useMutation<MyCart, unknown, undefined>(clientSecret, {
-    onSuccess: (data) => {
-      queryClient.setQueryData(['product'], data);
-    },
-  });
+  return useMutation<MyCart, unknown, undefined>(clientSecret);
 }

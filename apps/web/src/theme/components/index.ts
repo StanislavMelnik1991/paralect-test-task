@@ -6,3 +6,4 @@ export { default as TextInput } from './TextInput';
 export { default as Checkbox } from './Checkbox';
 export { default as NavLink } from './NavLink';
 export { default as Pill } from './Pill';
+export { default as Badge } from './Badge';

@@ -1,0 +1,10 @@
+.root {
+  position: relative;
+}
+
+.label {
+  text-transform: none;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: normal;
+}

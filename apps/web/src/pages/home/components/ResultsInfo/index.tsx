@@ -54,7 +54,7 @@ export const ResultsInfo = ({
       </Skeleton>
     </Group>
     <Pill.Group>
-      {filter[0] && (
+      {!isLoading && filter[0] && (
       <Pill
         withRemoveButton
         size="md"

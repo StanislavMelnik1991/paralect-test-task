@@ -14,7 +14,6 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => (
     header={{ height: 72 }}
     classNames={{
       root: classes.root,
-      main: classes.main,
     }}
   >
     <Header />

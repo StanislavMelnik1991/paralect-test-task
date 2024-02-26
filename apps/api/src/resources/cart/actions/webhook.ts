@@ -3,6 +3,7 @@ import { AppKoaContext, AppRouter } from 'types';
 import { z } from 'zod';
 import { cartService } from '..';
 import { analyticsService, stripeService } from 'services';
+import { productService } from 'resources/product';
 
 const schema = z.object({
   id: z.string(),
@@ -31,10 +32,19 @@ async function handler(ctx: AppKoaContext<ValidatedData>) {
           analyticsService.track('User paid for the order', {
             cartId: metadata.cartId,
           });
-          await cartService.updateOne(
+          const cart = await cartService.updateOne(
             { _id: metadata.cartId },
             () => ({ isPaid: true }),
           );
+          cart?.products.forEach(({ productId, quantity }) => {
+            productService.updateOne(
+              { _id: productId },
+              (val) => ({
+                pending: val.pending - quantity,
+                sold: val.sold + quantity,
+              }),
+            );
+          });
         }
       }
       break;
