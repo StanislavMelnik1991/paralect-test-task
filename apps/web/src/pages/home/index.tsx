@@ -69,7 +69,7 @@ const Home: NextPage = () => {
                 {[1, 2, 3, 4, 5, 6].map((item) => (
                   <Grid.Col span={4} key={`sklton-${String(item)}`}>
                     <Skeleton
-                      height={50}
+                      height={475}
                       radius="sm"
                       mb="sm"
                     />

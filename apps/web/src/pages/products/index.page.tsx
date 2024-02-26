@@ -33,10 +33,10 @@ const Products: NextPage = () => {
         <Stack w="100%" gap={20}>
           {isProductsLoading && (
             <Grid w="100%">
-              {[1, 2, 3, 4, 5, 6].map((item) => (
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((item) => (
                 <Grid.Col span={4} key={`sklton-${String(item)}`}>
                   <Skeleton
-                    height={50}
+                    height={355}
                     radius="sm"
                     mb="sm"
                   />
