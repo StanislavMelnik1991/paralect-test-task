@@ -127,6 +127,7 @@ const SignUp: NextPage = () => {
             <Stack gap={20}>
               <TextInput
                 {...register('email')}
+                size="lg"
                 label="Email Address"
                 placeholder="Email Address"
                 error={errors.email?.message}
@@ -134,6 +135,7 @@ const SignUp: NextPage = () => {
 
               <PasswordInput
                 {...register('password')}
+                size="lg"
                 label="Password"
                 placeholder="Enter password"
                 error={errors.password?.message}
@@ -141,6 +143,8 @@ const SignUp: NextPage = () => {
               <Group gap={8}>
                 {passwordRulesData.map((ruleData) => (
                   <Checkbox
+                    size="sm"
+                    variant="outline"
                     key={ruleData.title}
                     checked={ruleData.done}
                     label={ruleData.title}

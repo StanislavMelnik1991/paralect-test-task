@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from 'react-query';
 
-import { Cart, Product } from 'types';
+import { Product } from 'types';
 
 import { apiService } from 'services';
 import queryClient from 'query-client';
@@ -42,16 +42,6 @@ export function useDelete<T>() {
   });
 }
 
-export function useAddToCart<T>() {
-  const createProduct = (data: T) => apiService.post('/me/cart', data);
-
-  return useMutation<{ cart: Cart }, unknown, T>(createProduct, {
-    onSuccess: () => {
-      queryClient.invalidateQueries('products');
-    },
-  });
-}
-
 export function useUploadImage<T>() {
   const uploadAvatar = (data: T) => apiService.post('/me/products/preview/', data);
 
@@ -60,24 +50,4 @@ export function useUploadImage<T>() {
       queryClient.setQueryData(['product'], data);
     },
   });
-}
-
-export function useMyCart() {
-  const list = () => apiService.get('/me/cart/') as Promise<MyCart>;
-
-  interface MyCart {
-    items: Array<Product>,
-    amount: number,
-    count: number,
-  }
-
-  return useQuery<MyCart>(['my_cart'], list);
-}
-
-export function useBue() {
-  const clientSecret = () => apiService.post('/me/cart/bue/');
-
-  interface MyCart { link: string, }
-
-  return useMutation<MyCart, unknown, undefined>(clientSecret);
 }

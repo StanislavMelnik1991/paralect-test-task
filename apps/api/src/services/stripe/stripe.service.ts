@@ -12,10 +12,10 @@ export class StripeService {
 
   async createPaymentLink({
     products,
-    cartId,
+    userId,
   }:
   {
-    cartId: string,
+    userId: string,
     products: Array<{ 
       price: number, 
       name: string, 
@@ -38,7 +38,7 @@ export class StripeService {
     const session = await this.stripe.checkout.sessions.create({
       line_items: lineItems,
       payment_intent_data: {
-        metadata: { cartId },
+        metadata: { userId },
       },
       mode: 'payment',
       success_url: `${config.WEB_URL}/cart`,

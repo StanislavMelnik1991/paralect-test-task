@@ -45,6 +45,7 @@ const SignIn: NextPage = () => {
             <Stack gap={20}>
               <TextInput
                 {...register('email')}
+                size="lg"
                 label="Email Address"
                 placeholder="Email Address"
                 error={errors.email?.message}
@@ -52,6 +53,7 @@ const SignIn: NextPage = () => {
 
               <PasswordInput
                 {...register('password')}
+                size="lg"
                 label="Password"
                 placeholder="Enter password"
                 error={errors.password?.message}

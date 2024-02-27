@@ -1,8 +1,7 @@
 import { z } from 'zod';
 
 import { AppKoaContext, AppRouter } from 'types';
-
-import { cartService } from 'resources/cart';
+import { userService } from 'resources/user';
 import { productService } from 'resources/product';
 
 import { validateMiddleware } from 'middlewares';
@@ -16,21 +15,14 @@ const schema = z.object({
 type ValidatedData = z.infer<typeof schema>;
 
 async function handler(ctx: AppKoaContext<ValidatedData>) {
-  const { _id: userId } = ctx.state.user;
+  const { _id: userId, cart } = ctx.state.user;
   const { productId, quantity } = ctx.validatedData;
 
-  const product = await productService.findOne({
-    _id: productId,
-  });
-  const cart = await cartService.findOne({ userId, isPaid: false });
+  const product = await productService.findOne({ _id: productId });
 
-  ctx.assertClientError(product && product.quantity >= 0, {
-    credentials: 'Product not found',
-  });
-
-  ctx.assertClientError(product.quantity >= quantity, {
-    credentials: 'Not enough quantity',
-  });
+  if (!product || !product.quantity) {
+    ctx.throw('Product not found at cart', 404);
+  }
 
   await productService.updateOne(
     { _id: productId },
@@ -39,20 +31,15 @@ async function handler(ctx: AppKoaContext<ValidatedData>) {
       pending: product.pending + quantity,
     }),
   );
-  if (!cart) {
-    const newCart = await cartService.insertOne({ userId, isPaid: false, products: [{ productId, quantity }] });
-    ctx.body = { cart: newCart };
-    return;
-  }
-  const existed = cart.products.find((val) => val.productId === productId);
+  const existed = cart.current.find((val) => val.productId === productId);
   if (existed) {
     existed.quantity += quantity;
   } else {
-    cart.products.push({ productId, quantity });
+    cart.current.push({ productId, quantity, price: product.price });
   }
-  await cartService.updateOne(
-    { _id: cart._id },
-    () => (cart),
+  await userService.updateOne(
+    { _id: userId },
+    () => ({ cart }),
   );
   analyticsService.track('User add product to basket', {
     userId,

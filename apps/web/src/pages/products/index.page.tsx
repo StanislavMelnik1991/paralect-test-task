@@ -8,9 +8,10 @@ import {
   Pagination,
   Text,
 } from '@mantine/core';
+import { NotFoundResults } from 'components/NotFound';
 import classes from './index.module.css';
 import { useProducts } from './hooks';
-import { AddButton, NotFoundProducts, Results } from './components';
+import { AddButton, Results } from './components';
 
 const Products: NextPage = () => {
   const {
@@ -26,11 +27,11 @@ const Products: NextPage = () => {
       <Head>
         <title>Your Products</title>
       </Head>
-      <Stack className={classes.wrapper} p="lg">
+      <Stack className={classes.wrapper}>
         <Text size="lg" fw="bold">
           Your Products
         </Text>
-        <Stack w="100%" gap={20}>
+        <Stack w="100%" gap={20} h="100%" justify="center">
           {isProductsLoading && (
             <Grid w="100%">
               {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((item) => (
@@ -52,19 +53,21 @@ const Products: NextPage = () => {
               addButton={<AddButton />}
             />
           ) : (
-            <NotFoundProducts />
+            <NotFoundResults />
           )}
         </Stack>
-        <Group wrap="nowrap" justify="center" mt="auto">
-          {data && data.totalPages > 1 && (
+
+        {data && data.totalPages > 1 && (
+          <Group wrap="nowrap" justify="center" mt="auto">
             <Pagination
               total={data.totalPages}
               value={activePage}
               onChange={setPage}
               h={42}
             />
-          )}
-        </Group>
+          </Group>
+        )}
+
       </Stack>
     </>
   );

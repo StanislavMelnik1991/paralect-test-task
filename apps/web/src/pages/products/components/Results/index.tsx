@@ -24,11 +24,14 @@ export const Results = ({ data, addButton, handleDelete }: Props) => (
       <Grid.Col span={1} key={product._id}>
         <ProductCard
           product={product}
-          secondaryButton={(
-            <RemoveButton
-              onClick={handleDelete({ id: product._id, name: product.name })}
-            />
-          )}
+          secondaryButton={
+            !product.sold && !product.pending && (
+              <RemoveButton
+                onClick={handleDelete({ id: product._id, name: product.name })}
+                disabled={!!product.sold || !!product.pending}
+              />
+            )
+          }
           badge={(
             <CardBadge
               pending={product.pending}

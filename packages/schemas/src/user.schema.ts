@@ -17,4 +17,18 @@ export const userSchema = dbSchema.extend({
   }).optional(),
 
   lastRequest: z.date().optional(),
+
+  cart: z.object({
+    history: z.array(z.object({
+      productId: z.string(),
+      quantity: z.number().optional().default(1),
+      price: z.number().min(0),
+
+    })),
+    current: z.array(z.object({
+      productId: z.string(),
+      quantity: z.number().optional().default(1),
+      price: z.number().min(0),
+    })),
+  }).optional().default({ history: [], current: [] }),
 }).strict();

@@ -25,6 +25,7 @@ const privateFields = [
   'passwordHash',
   'signupToken',
   'resetPasswordToken',
+  'cart',
 ];
 
 const getPublic = (user: User | null) => _.omit(user, privateFields);

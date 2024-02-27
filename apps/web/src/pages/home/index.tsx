@@ -8,10 +8,10 @@ import {
   Pagination,
 } from '@mantine/core';
 
+import { NotFoundResults } from 'components/NotFound';
 import classes from './index.module.css';
 import { useHome } from './hooks';
 import {
-  NotFoundProducts,
   Results,
   ResultsInfo,
   SearchProducts,
@@ -33,22 +33,23 @@ const Home: NextPage = () => {
     selectOptions,
     filterDate,
     handleFilter,
+    handleResetFilters,
   } = useHome();
   return (
     <>
       <Head>
         <title>Home</title>
       </Head>
-      <Stack className={classes.wrapper} p="lg">
-        <Grid w="100%" columns={4} gutter={28}>
+      <Stack className={classes.wrapper}>
+        <Grid w="100%" h="100%" columns={4} gutter={28}>
           <Grid.Col span={1}>
             <Filters
               data={filterDate}
               onChange={handleFilter}
             />
           </Grid.Col>
-          <Grid.Col span={3}>
-            <Stack w="100%" gap={20}>
+          <Grid.Col span={3} h="100%">
+            <Stack w="100%" gap={20} h="100%">
               <SearchProducts
                 isLoading={isProductsLoading}
                 setValue={setSearch}
@@ -86,21 +87,21 @@ const Home: NextPage = () => {
                   accountId={account?._id}
                 />
               ) : (
-                <NotFoundProducts />
+                <NotFoundResults onClick={handleResetFilters} />
               )}
             </Stack>
           </Grid.Col>
         </Grid>
-        <Group wrap="nowrap" justify="center" mt="auto">
-          {data && data.totalPages > 1 && (
+        {data && data.totalPages > 1 && (
+          <Group wrap="nowrap" justify="center" mt="auto">
             <Pagination
               total={data.totalPages}
               value={activePage}
               onChange={setPage}
               h={42}
             />
-          )}
-        </Group>
+          </Group>
+        )}
       </Stack>
     </>
   );

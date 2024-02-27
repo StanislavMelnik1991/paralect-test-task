@@ -1,10 +1,10 @@
 import { MouseEventHandler, useCallback, useLayoutEffect, useState } from 'react';
 import { useDebouncedValue, useInputState } from '@mantine/hooks';
 
+import { cartApi } from 'resources/cart';
 import { productApi } from 'resources/products';
 
 import { accountApi } from 'resources/account';
-import { toast } from 'react-toastify';
 import { z } from 'zod';
 import { PER_PAGE, selectOptions, UsersListParams } from './constants';
 
@@ -21,7 +21,7 @@ export const useHome = () => {
   const [filterDate, setFilterDate] = useState<
   [string | undefined, string | undefined]
   >([undefined, undefined]);
-  const { mutate: addToCart } = productApi.useAddToCart<AddToCartParams>();
+  const { mutate: addToCart } = cartApi.useAddToCart<AddToCartParams>();
 
   const [params, setParams] = useState<UsersListParams>({ sort: { createdOn: 'desc' } });
   const { data, isLoading: isProductsLoading } = productApi.useList(params);
@@ -77,14 +77,15 @@ export const useHome = () => {
     }));
   }, [activePage, debouncedFilter, debouncedSearch]);
 
-  type ClickHandler = (data: { id: string, name: string }) => MouseEventHandler<HTMLButtonElement>;
-  const handleAddToCart: ClickHandler = useCallback(({ id, name }) => () => {
-    addToCart({ productId: id }, {
-      onSuccess: () => {
-        toast(`${name} has been added to your cart`);
-      },
-    });
+  type ClickHandler = (id: string) => MouseEventHandler<HTMLButtonElement>;
+  const handleAddToCart: ClickHandler = useCallback((id) => () => {
+    addToCart({ productId: id });
   }, [addToCart]);
+
+  const handleResetFilters = useCallback(() => {
+    setSearch('');
+    setFilterDate([undefined, undefined]);
+  }, [setSearch]);
 
   return {
     handleAddToCart,
@@ -100,5 +101,6 @@ export const useHome = () => {
     setPage,
     selectOptions,
     filterDate: debouncedFilter,
+    handleResetFilters,
   };
 };

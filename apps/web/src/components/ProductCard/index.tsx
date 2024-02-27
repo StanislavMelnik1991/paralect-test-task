@@ -6,9 +6,9 @@ import classes from './index.module.css';
 
 type Props = {
   product: Product
-  mainButton?: JSX.Element
-  secondaryButton?: JSX.Element
-  badge?: JSX.Element
+  mainButton?: JSX.Element | false
+  secondaryButton?: JSX.Element | false
+  badge?: JSX.Element | false
 };
 
 export const ProductCard = ({

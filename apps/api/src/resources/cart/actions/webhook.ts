@@ -1,9 +1,9 @@
 import { validateMiddleware } from 'middlewares';
 import { AppKoaContext, AppRouter } from 'types';
 import { z } from 'zod';
-import { cartService } from '..';
 import { analyticsService, stripeService } from 'services';
 import { productService } from 'resources/product';
+import { userService } from 'resources/user';
 
 const schema = z.object({
   id: z.string(),
@@ -28,23 +28,42 @@ async function handler(ctx: AppKoaContext<ValidatedData>) {
     case 'payment_intent.succeeded':
       if (object) {
         const { status, metadata } = await stripeService.getPayment(object.id);
-        if (status === 'succeeded' && metadata.cartId) {
+        if (status === 'succeeded' && metadata.userId) {
           analyticsService.track('User paid for the order', {
-            cartId: metadata.cartId,
+            userId: metadata.userId,
           });
-          const cart = await cartService.updateOne(
-            { _id: metadata.cartId },
-            () => ({ isPaid: true }),
-          );
-          cart?.products.forEach(({ productId, quantity }) => {
-            productService.updateOne(
+
+          const user = await userService.findOne({ _id: metadata.userId });
+          if (!user) {
+            ctx.throw('User not found', 404);
+          }
+          const { current, history } = user.cart;
+
+          await Promise.all(current.map(({ productId, quantity }) => {
+            return productService.updateOne(
               { _id: productId },
               (val) => ({
                 pending: val.pending - quantity,
                 sold: val.sold + quantity,
               }),
             );
-          });
+          }));
+
+          await userService.updateOne(
+            { _id: metadata.userId },
+            () => {
+
+              return {
+                cart: {
+                  current: [],
+                  history: [
+                    ...history,
+                    ...current,
+                  ],
+                },
+              };
+            },
+          );
         }
       }
       break;

@@ -6,4 +6,3 @@ export * from './web.types';
 export * from './token.types';
 export * from './user.types';
 export * from './product.types';
-export * from './cart.types';

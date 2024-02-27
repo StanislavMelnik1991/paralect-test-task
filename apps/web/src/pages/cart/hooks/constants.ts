@@ -35,3 +35,11 @@ export const selectOptions: ComboboxItem[] = [
     label: 'Oldest',
   },
 ];
+
+export interface CartProducts {
+  id: string
+  image: string
+  name: string
+  price: number
+  quantity: number
+}

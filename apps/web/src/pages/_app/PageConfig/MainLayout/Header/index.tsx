@@ -1,43 +1,39 @@
 import { memo, FC } from 'react';
-import { AppShellHeader as LayoutHeader, Container } from '@mantine/core';
-
-import { accountApi } from 'resources/account';
-
+import {
+  AppShellHeader as LayoutHeader,
+  Container,
+  Box,
+} from '@mantine/core';
 import { Link } from 'components';
 import { RoutePath } from 'routes';
 
 import { LogoImage } from 'public/images';
 
-import UserMenu from './components/UserMenu';
-import NavigationMenu from './components/Navigation';
-
 import classes from './index.module.css';
+import {
+  NavigationMenu,
+  LogoutIcon,
+  CartIcon,
+} from './components';
 
-const Header: FC = () => {
-  const { data: account } = accountApi.useGet();
-
-  return (
-    <LayoutHeader>
-      <Container
-        className={classes.header}
-        mih={72}
-        px={32}
-        py={0}
-        display="flex"
-        fluid
-      >
-        <Link type="router" href={RoutePath.Home}>
-          <LogoImage />
-        </Link>
-        <NavigationMenu />
-        {
-          account
-            ? <UserMenu />
-            : <Link type="router" href={RoutePath.SignIn}>SignIn</Link>
-        }
-      </Container>
-    </LayoutHeader>
-  );
-};
+const Header: FC = () => (
+  <LayoutHeader>
+    <Container
+      className={classes.wrapper}
+      mih={72}
+      display="flex"
+      fluid
+    >
+      <Link type="router" href={RoutePath.Home}>
+        <LogoImage />
+      </Link>
+      <NavigationMenu />
+      <Box display="flex" className={classes.userMenu}>
+        <CartIcon />
+        <LogoutIcon />
+      </Box>
+    </Container>
+  </LayoutHeader>
+);
 
 export default memo(Header);

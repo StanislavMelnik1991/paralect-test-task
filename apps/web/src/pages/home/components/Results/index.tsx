@@ -1,4 +1,4 @@
-import { Grid } from '@mantine/core';
+import { Badge, Flex, Grid } from '@mantine/core';
 import { type Product } from 'types';
 import { type MouseEventHandler } from 'react';
 import { ProductCard } from 'components/ProductCard';
@@ -6,10 +6,7 @@ import { AddToCartButton } from './AddToCartButton';
 
 type Props = {
   data: Array<Product>
-  handleAddToCart: (data: {
-    id: string;
-    name: string;
-  }) => MouseEventHandler<HTMLButtonElement>
+  handleAddToCart: (id: string) => MouseEventHandler<HTMLButtonElement>
   disabled: boolean
   accountId?: string
 };
@@ -20,9 +17,14 @@ export const Results = ({ data, handleAddToCart, disabled, accountId }: Props) =
       <Grid.Col span={4} key={product._id}>
         <ProductCard
           product={product}
+          badge={(
+            <Flex bg="white">
+              <Badge radius={0} size="lg" variant="light" color="blue">{product.quantity}</Badge>
+            </Flex>
+          )}
           mainButton={(
             <AddToCartButton
-              onClick={handleAddToCart({ id: product._id, name: product.name })}
+              onClick={handleAddToCart(product._id)}
               disabled={disabled || product.createdBy === accountId}
             />
           )}

@@ -5,7 +5,7 @@ import { Button } from '@mantine/core';
 import { useRouter } from 'next/router';
 import classes from './index.module.css';
 
-const NavigationMenu: FC = () => {
+const Component: FC = () => {
   const router = useRouter();
   return (
     <nav className={classes.navigation}>
@@ -13,7 +13,7 @@ const NavigationMenu: FC = () => {
         size="sm"
         variant="filled"
         onClick={() => router.push(RoutePath.Home)}
-        className={classes.link}
+        className={classes.button}
         disabled={router.route === RoutePath.Home}
       >
         Marketplace
@@ -22,7 +22,7 @@ const NavigationMenu: FC = () => {
         size="sm"
         variant="filled"
         onClick={() => router.push(RoutePath.Products)}
-        className={classes.link}
+        className={classes.button}
         disabled={router.route === RoutePath.Products}
       >
         Your Products
@@ -31,4 +31,4 @@ const NavigationMenu: FC = () => {
   );
 };
 
-export default memo(NavigationMenu);
+export const NavigationMenu = memo(Component);

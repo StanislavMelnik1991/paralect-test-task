@@ -1,0 +1,14 @@
+.navigation {
+  display: flex;
+  gap: 32px;
+}
+
+.button {
+  white-space: nowrap;
+
+  &:disabled {
+    color: var(--text-color);
+    background-color: transparent;
+    pointer-events: none;
+  }
+}
