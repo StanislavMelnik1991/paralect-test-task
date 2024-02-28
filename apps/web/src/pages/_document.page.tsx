@@ -1,3 +1,3 @@
-import Document from 'pages/_document';
+import Document from '_pages/_document';
 
 export default Document;

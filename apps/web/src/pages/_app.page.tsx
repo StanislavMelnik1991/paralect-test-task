@@ -1,3 +1,3 @@
-import App from 'pages/_app';
+import App from '_pages/_app';
 
 export default App;

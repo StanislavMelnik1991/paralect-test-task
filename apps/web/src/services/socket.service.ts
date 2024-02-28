@@ -1,6 +1,6 @@
 import io from 'socket.io-client';
 
-import config from 'config';
+import config from '_app/config';
 
 const socket = io(config.WS_URL, {
   transports: ['websocket'],

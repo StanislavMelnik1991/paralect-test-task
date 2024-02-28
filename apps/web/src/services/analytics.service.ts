@@ -1,4 +1,4 @@
-import config from 'config';
+import config from '_app/config';
 import mixpanel from 'mixpanel-browser';
 
 import { User } from 'types';

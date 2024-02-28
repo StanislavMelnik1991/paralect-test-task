@@ -1,7 +1,7 @@
 // eslint-disable-next-line max-classes-per-file
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 
-import config from 'config';
+import config from '_app/config';
 
 export class ApiError extends Error {
   __proto__: ApiError;
