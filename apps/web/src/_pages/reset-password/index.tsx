@@ -4,14 +4,9 @@ import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Stack, Title, Text, Button, PasswordInput } from '@mantine/core';
-import Head from 'next/head';
-import { NextPage } from 'next';
-
-import { accountApi } from 'services/resources/account';
-
+import { accountApi } from 'features/resources/account';
 import { handleError } from 'shared/utils';
 import { RoutePath } from '_app/routes';
-
 import { QueryParam } from 'types';
 import { PASSWORD_REGEX } from 'app-constants';
 
@@ -26,7 +21,7 @@ const schema = z.object({
 
 type ResetPasswordParams = z.infer<typeof schema>;
 
-const ResetPassword: NextPage = () => {
+const ResetPassword = () => {
   const router = useRouter();
 
   const { token } = router.query;
@@ -62,57 +57,47 @@ const ResetPassword: NextPage = () => {
 
   if (isSubmitted) {
     return (
-      <>
-        <Head>
-          <title>Reset Password</title>
-        </Head>
-        <Stack w={328}>
-          <Title order={2}>Password has been updated</Title>
+      <Stack w={328}>
+        <Title order={2}>Password has been updated</Title>
 
-          <Text mt={0}>
-            Your password has been updated successfully.
-            You can now use your new password to sign in.
-          </Text>
+        <Text mt={0}>
+          Your password has been updated successfully.
+          You can now use your new password to sign in.
+        </Text>
 
-          <Button onClick={() => router.push(RoutePath.SignIn)}>
-            Back to Sign In
-          </Button>
-        </Stack>
-      </>
+        <Button onClick={() => router.push(RoutePath.SignIn)}>
+          Back to Sign In
+        </Button>
+      </Stack>
     );
   }
 
   return (
-    <>
-      <Head>
-        <title>Reset Password</title>
-      </Head>
-      <Stack w={328}>
-        <Title order={2}>Reset Password</Title>
-        <Text mt={0}>Please choose your new password</Text>
-        <form
-          className={classes.form}
-          onSubmit={handleSubmit(onSubmit)}
-        >
-          <PasswordInput
-            {...register('password')}
-            type="password"
-            label="Password"
-            placeholder="Your new password"
-            error={errors.password?.message}
-          />
+    <Stack w={328}>
+      <Title order={2}>Reset Password</Title>
+      <Text mt={0}>Please choose your new password</Text>
+      <form
+        className={classes.form}
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <PasswordInput
+          {...register('password')}
+          type="password"
+          label="Password"
+          placeholder="Your new password"
+          error={errors.password?.message}
+        />
 
-          <Button
-            type="submit"
-            loading={isResetPasswordLoading}
-            loaderProps={{ size: 'xs' }}
-            fullWidth
-          >
-            Save New Password
-          </Button>
-        </form>
-      </Stack>
-    </>
+        <Button
+          type="submit"
+          loading={isResetPasswordLoading}
+          loaderProps={{ size: 'xs' }}
+          fullWidth
+        >
+          Save New Password
+        </Button>
+      </form>
+    </Stack>
   );
 };
 

@@ -3,16 +3,10 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from 'react-query';
 import { showNotification } from '@mantine/notifications';
-import Head from 'next/head';
-import { NextPage } from 'next';
 import { Button, TextInput, PasswordInput, Stack, Title } from '@mantine/core';
-
-import { accountApi } from 'services/resources/account';
-
+import { accountApi } from 'features/resources/account';
 import { handleError } from 'shared/utils';
-
 import PhotoUpload from './components/PhotoUpload';
-
 import classes from './index.module.css';
 
 const schema = z.object({
@@ -24,7 +18,7 @@ const schema = z.object({
 
 type UpdateParams = z.infer<typeof schema>;
 
-const Profile: NextPage = () => {
+const Profile = () => {
   const queryClient = useQueryClient();
 
   const { data: account } = accountApi.useGet();
@@ -57,51 +51,46 @@ const Profile: NextPage = () => {
   });
 
   return (
-    <>
-      <Head>
-        <title>Profile</title>
-      </Head>
-      <Stack
-        w={408}
-        m="auto"
-        pt={48}
-        gap={32}
+    <Stack
+      w={408}
+      m="auto"
+      pt={48}
+      gap={32}
+    >
+      <Title order={1}>Profile</Title>
+      <PhotoUpload />
+
+      <form
+        className={classes.form}
+        onSubmit={handleSubmit(onSubmit)}
       >
-        <Title order={1}>Profile</Title>
-        <PhotoUpload />
+        <Stack gap={20}>
 
-        <form
-          className={classes.form}
-          onSubmit={handleSubmit(onSubmit)}
+          <TextInput
+            label="Email Address"
+            defaultValue={account?.email}
+            disabled
+          />
+
+          <PasswordInput
+            {...register('password')}
+            label="Password"
+            placeholder="Enter password"
+            labelProps={{
+              'data-invalid': !!errors.password,
+            }}
+            error={errors.password?.message}
+          />
+        </Stack>
+
+        <Button
+          type="submit"
+          loading={isUpdateLoading}
         >
-          <Stack gap={20}>
-
-            <TextInput
-              label="Email Address"
-              defaultValue={account?.email}
-              disabled
-            />
-
-            <PasswordInput
-              {...register('password')}
-              label="Password"
-              placeholder="Enter password"
-              labelProps={{
-                'data-invalid': !!errors.password,
-              }}
-              error={errors.password?.message}
-            />
-          </Stack>
-
-          <Button
-            type="submit"
-            loading={isUpdateLoading}
-          >
-            Update Profile
-          </Button>
-        </form>
-      </Stack>
-    </>
+          Update Profile
+        </Button>
+      </form>
+    </Stack>
   );
 };
 

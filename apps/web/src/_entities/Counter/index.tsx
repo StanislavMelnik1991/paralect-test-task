@@ -1,7 +1,7 @@
 import { ActionIcon, Flex } from '@mantine/core';
 import { IconPlus, IconMinus } from '@tabler/icons-react';
 import { memo } from 'react';
-import { cartApi } from 'services/resources/cart';
+import { cartApi } from 'features/resources/cart';
 import { z } from 'zod';
 
 type Props = {

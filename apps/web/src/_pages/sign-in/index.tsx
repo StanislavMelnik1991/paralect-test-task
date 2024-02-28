@@ -1,16 +1,11 @@
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import Head from 'next/head';
-import { NextPage } from 'next';
 import { TextInput, PasswordInput, Button, Group, Stack, Title, Alert } from '@mantine/core';
 import { IconAlertCircle } from '@tabler/icons-react';
-
-import { accountApi } from 'services/resources/account';
-
+import { accountApi } from 'features/resources/account';
 import { handleError } from 'shared/utils';
 import { RoutePath } from '_app/routes';
-
 import { EMAIL_REGEX } from 'app-constants';
 import { Link } from '_entities';
 
@@ -21,7 +16,7 @@ const schema = z.object({
 
 type SignInParams = z.infer<typeof schema> & { credentials?: string };
 
-const SignIn: NextPage = () => {
+const SignIn = () => {
   const {
     register, handleSubmit, formState: { errors }, setError,
   } = useForm<SignInParams>({ resolver: zodResolver(schema) });
@@ -33,67 +28,62 @@ const SignIn: NextPage = () => {
   });
 
   return (
-    <>
-      <Head>
-        <title>Sign in</title>
-      </Head>
-      <Stack w={408} gap={20}>
-        <Stack gap={20}>
-          <Title order={1}>Sign In</Title>
+    <Stack w={408} gap={20}>
+      <Stack gap={20}>
+        <Title order={1}>Sign In</Title>
 
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <Stack gap={20}>
-              <TextInput
-                {...register('email')}
-                size="lg"
-                label="Email Address"
-                placeholder="Email Address"
-                error={errors.email?.message}
-              />
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Stack gap={20}>
+            <TextInput
+              {...register('email')}
+              size="lg"
+              label="Email Address"
+              placeholder="Email Address"
+              error={errors.email?.message}
+            />
 
-              <PasswordInput
-                {...register('password')}
-                size="lg"
-                label="Password"
-                placeholder="Enter password"
-                error={errors.password?.message}
-              />
+            <PasswordInput
+              {...register('password')}
+              size="lg"
+              label="Password"
+              placeholder="Enter password"
+              error={errors.password?.message}
+            />
 
-              {errors!.credentials && (
-                <Alert icon={<IconAlertCircle size={16} />} color="red">
-                  {errors.credentials.message}
-                </Alert>
-              )}
-            </Stack>
+            {errors!.credentials && (
+            <Alert icon={<IconAlertCircle size={16} />} color="red">
+              {errors.credentials.message}
+            </Alert>
+            )}
+          </Stack>
 
-            <Button
-              loading={isSignInLoading}
-              type="submit"
-              fullWidth
-              mt={32}
-              h={40}
-              size="sm"
-            >
-              Sign in
-            </Button>
-          </form>
-        </Stack>
-
-        <Stack gap={20}>
-          <Group fz={16} justify="center" gap={12}>
-            Don’t have an account?
-            <Link
-              type="router"
-              href={RoutePath.SignUp}
-              underline={false}
-              inherit
-            >
-              Sign up
-            </Link>
-          </Group>
-        </Stack>
+          <Button
+            loading={isSignInLoading}
+            type="submit"
+            fullWidth
+            mt={32}
+            h={40}
+            size="sm"
+          >
+            Sign in
+          </Button>
+        </form>
       </Stack>
-    </>
+
+      <Stack gap={20}>
+        <Group fz={16} justify="center" gap={12}>
+          Don’t have an account?
+          <Link
+            type="router"
+            href={RoutePath.SignUp}
+            underline={false}
+            inherit
+          >
+            Sign up
+          </Link>
+        </Group>
+      </Stack>
+    </Stack>
   );
 };
 

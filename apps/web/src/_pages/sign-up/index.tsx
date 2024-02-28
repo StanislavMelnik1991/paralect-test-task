@@ -2,8 +2,6 @@ import { z } from 'zod';
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import Head from 'next/head';
-import { NextPage } from 'next';
 import {
   Button,
   Stack,
@@ -14,13 +12,10 @@ import {
   Text,
   Checkbox,
 } from '@mantine/core';
-
-import { accountApi } from 'services/resources/account';
-
+import { accountApi } from 'features/resources/account';
 import config from '_app/config';
 import { handleError } from 'shared/utils';
 import { RoutePath } from '_app/routes';
-
 import { EMAIL_REGEX, PASSWORD_REGEX } from 'app-constants';
 import { Link } from '_entities';
 
@@ -46,7 +41,7 @@ const passwordRules = [
   },
 ];
 
-const SignUp: NextPage = () => {
+const SignUp = () => {
   const [email, setEmail] = useState('');
   const [registered, setRegistered] = useState(false);
   const [signupToken, setSignupToken] = useState();
@@ -88,99 +83,89 @@ const SignUp: NextPage = () => {
 
   if (registered) {
     return (
-      <>
-        <Head>
-          <title>Sign up</title>
-        </Head>
-        <Stack w={450}>
-          <Title order={2}>Thanks!</Title>
+      <Stack w={450}>
+        <Title order={2}>Thanks!</Title>
 
-          <Text size="md" c="gray.6">
-            Please follow the instructions from the email to complete a sign up process.
-            We sent an email with a confirmation link to
-            {' '}
-            <b>{email}</b>
-          </Text>
+        <Text size="md" c="gray.6">
+          Please follow the instructions from the email to complete a sign up process.
+          We sent an email with a confirmation link to
+          {' '}
+          <b>{email}</b>
+        </Text>
 
-          {signupToken && (
-            <Stack gap={0}>
-              <Text>You look like a cool developer.</Text>
-              <Link size="sm" href={`${config.API_URL}/account/verify-email?token=${signupToken}`}>
-                Verify email
-              </Link>
-            </Stack>
-          )}
+        {signupToken && (
+        <Stack gap={0}>
+          <Text>You look like a cool developer.</Text>
+          <Link size="sm" href={`${config.API_URL}/account/verify-email?token=${signupToken}`}>
+            Verify email
+          </Link>
         </Stack>
-      </>
+        )}
+      </Stack>
     );
   }
 
   return (
-    <>
-      <Head>
-        <title>Sign up</title>
-      </Head>
-      <Stack w={408} gap={32}>
-        <Stack gap={32}>
-          <Title order={1}>Sign Up</Title>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <Stack gap={20}>
-              <TextInput
-                {...register('email')}
-                size="lg"
-                label="Email Address"
-                placeholder="Email Address"
-                error={errors.email?.message}
-              />
+    <Stack w={408} gap={32}>
+      <Stack gap={32}>
+        <Title order={1}>Sign Up</Title>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Stack gap={20}>
+            <TextInput
+              {...register('email')}
+              size="lg"
+              label="Email Address"
+              placeholder="Email Address"
+              error={errors.email?.message}
+            />
 
-              <PasswordInput
-                {...register('password')}
-                size="lg"
-                label="Password"
-                placeholder="Enter password"
-                error={errors.password?.message}
-              />
-              <Group gap={8}>
-                {passwordRulesData.map((ruleData) => (
-                  <Checkbox
-                    size="sm"
-                    variant="outline"
-                    key={ruleData.title}
-                    checked={ruleData.done}
-                    label={ruleData.title}
-                  />
-                ))}
-              </Group>
-            </Stack>
+            <PasswordInput
+              {...register('password')}
+              size="lg"
+              label="Password"
+              placeholder="Enter password"
+              error={errors.password?.message}
+            />
+            <Group gap={8}>
+              {passwordRulesData.map((ruleData) => (
+                <Checkbox
+                  size="sm"
+                  variant="outline"
+                  key={ruleData.title}
+                  checked={ruleData.done}
+                  label={ruleData.title}
+                />
+              ))}
+            </Group>
+          </Stack>
 
-            <Button
-              type="submit"
-              loading={isSignUpLoading}
-              fullWidth
-              mt={32}
-              h={40}
-              size="sm"
-            >
-              Create Account
-            </Button>
-          </form>
-        </Stack>
-
-        <Stack gap={32}>
-          <Group fz={16} justify="center" gap={12}>
-            Have an account?
-            <Link
-              type="router"
-              href={RoutePath.SignIn}
-              inherit
-              underline={false}
-            >
-              Sign In
-            </Link>
-          </Group>
-        </Stack>
+          <Button
+            type="submit"
+            loading={isSignUpLoading}
+            fullWidth
+            mt={32}
+            h={40}
+            size="sm"
+          >
+            Create Account
+          </Button>
+        </form>
       </Stack>
-    </>
+
+      <Stack gap={32}>
+        <Group fz={16} justify="center" gap={12}>
+          Have an account?
+          <Link
+            type="router"
+            href={RoutePath.SignIn}
+            inherit
+            underline={false}
+          >
+            Sign In
+          </Link>
+        </Group>
+      </Stack>
+    </Stack>
   );
 };
 

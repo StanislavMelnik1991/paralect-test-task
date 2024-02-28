@@ -1,3 +1,3 @@
-import App from '_pages/_app';
+import App from '_app/Layouts';
 
 export default App;

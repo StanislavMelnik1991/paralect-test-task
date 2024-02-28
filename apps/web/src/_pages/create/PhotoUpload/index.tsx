@@ -3,11 +3,8 @@ import { Group, Text, Stack, BackgroundImage, Center } from '@mantine/core';
 import { Dropzone, FileWithPath } from '@mantine/dropzone';
 import { IconPencil, IconPlus } from '@tabler/icons-react';
 import cx from 'clsx';
-
-import { productApi } from 'services/resources/products';
-
+import { productApi } from 'features/resources/products';
 import { handleError } from 'shared/utils';
-
 import classes from './index.module.css';
 
 const ONE_MB_IN_BYTES = 1048576;

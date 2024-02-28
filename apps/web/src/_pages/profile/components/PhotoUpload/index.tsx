@@ -4,7 +4,7 @@ import { Dropzone, FileWithPath } from '@mantine/dropzone';
 import { IconPencil, IconPlus } from '@tabler/icons-react';
 import cx from 'clsx';
 
-import { accountApi } from 'services/resources/account';
+import { accountApi } from 'features/resources/account';
 
 import { handleError } from 'shared/utils';
 

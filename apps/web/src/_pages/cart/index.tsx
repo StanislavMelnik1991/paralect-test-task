@@ -1,15 +1,12 @@
-import Head from 'next/head';
-import { NextPage } from 'next';
 import {
   Stack,
-  Button,
   Grid,
 } from '@mantine/core';
 import { NotFoundResults } from '_entities';
-import { CartNavigation, CartTable } from './components';
-import { useCart } from './hooks';
+import { CartNavigation, CartTable, Summary } from 'widgets/Cart';
+import { useCart } from 'features/cart';
 
-const Home: NextPage = () => {
+const Cart = () => {
   const {
     handleBue,
     isBueLoading,
@@ -17,31 +14,27 @@ const Home: NextPage = () => {
     amount,
   } = useCart();
   return (
-    <>
-      <Head>
-        <title>My cart</title>
-      </Head>
-      <Stack gap="lg">
-        <CartNavigation />
+    <Stack gap="lg">
+      <CartNavigation />
 
-        {elements?.length ? (
-          <Grid w="100%" columns={4} gutter={68}>
-            <Grid.Col span={3}>
-              <CartTable elements={elements} />
-            </Grid.Col>
-            <Grid.Col span={1}>
-              <Button fullWidth h="100%" onClick={handleBue} loading={isBueLoading}>
-                $
-                {amount}
-              </Button>
-            </Grid.Col>
-          </Grid>
-        ) : (
-          <NotFoundResults />
-        )}
-      </Stack>
-    </>
+      {elements?.length ? (
+        <Grid w="100%" columns={4} gutter={68}>
+          <Grid.Col span={3}>
+            <CartTable elements={elements} />
+          </Grid.Col>
+          <Grid.Col span={1}>
+            <Summary
+              amount={amount}
+              handleBue={handleBue}
+              isLoading={isBueLoading}
+            />
+          </Grid.Col>
+        </Grid>
+      ) : (
+        <NotFoundResults />
+      )}
+    </Stack>
   );
 };
 
-export default Home;
+export default Cart;
