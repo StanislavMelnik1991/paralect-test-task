@@ -1,4 +1,4 @@
-import { Box, Card, Group, Text } from '@mantine/core';
+import { Box, Card, Flex, Group, Text } from '@mantine/core';
 import Image from 'next/image';
 import { Product } from 'types';
 
@@ -53,9 +53,9 @@ export const ProductCard = ({
     </Group>
 
     {mainButton && (
-    <Box mt={22}>
+    <Flex mt={22} justify="center">
       {mainButton}
-    </Box>
+    </Flex>
     )}
   </Card>
 );

@@ -32,7 +32,7 @@ async function handler(ctx: AppKoaContext<ValidatedData>) {
   ) {
     ctx.throw('Product not found at cart', 404);
   }
-  ctx.assertClientError((product.quantity + cartProduct.quantity - quantity) > 0, {
+  ctx.assertClientError((product.quantity + cartProduct.quantity - quantity) >= 0, {
     quantity: 'Out of stock',
   });
 

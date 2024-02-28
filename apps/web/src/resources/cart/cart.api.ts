@@ -6,7 +6,7 @@ import { apiService } from 'services';
 import queryClient from 'query-client';
 
 interface MyCart {
-  items: Array<Product>,
+  items: Array<Product & { inBasket: number }>,
   amount: number,
   count: number,
 }

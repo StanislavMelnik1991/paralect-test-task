@@ -1,19 +1,14 @@
 import { Table } from '@mantine/core';
+import { ProductCounter } from 'components';
 import { CartProducts } from '../../hooks/constants';
 import ProductImage from './Image';
-import Counter from './Counter';
 import RemoveButton from './Remove';
 
 type Props = {
   elements: Array<CartProducts>
-  handleUpdateQuantity: (props: {
-    quantity: number;
-    productId: string;
-  }) => void
-  isUpdateLoading: boolean
 };
 
-export const CartTable = ({ elements, handleUpdateQuantity, isUpdateLoading }: Props) => {
+export const CartTable = ({ elements }: Props) => {
   const rows = elements.map((el) => (
     <Table.Tr key={el.name}>
       <Table.Td>
@@ -25,21 +20,14 @@ export const CartTable = ({ elements, handleUpdateQuantity, isUpdateLoading }: P
         {el.price}
       </Table.Td>
       <Table.Td>
-        <Counter
+        <ProductCounter
+          id={el.id}
+          available={el.available}
           quantity={el.quantity}
-          loading={isUpdateLoading}
-          changeQuantity={(quantity: number) => {
-            handleUpdateQuantity({ quantity, productId: el.id });
-          }}
         />
       </Table.Td>
       <Table.Td>
-        <RemoveButton
-          loading={isUpdateLoading}
-          changeQuantity={(quantity: number) => {
-            handleUpdateQuantity({ quantity, productId: el.id });
-          }}
-        />
+        <RemoveButton id={el.id} />
       </Table.Td>
     </Table.Tr>
   ));

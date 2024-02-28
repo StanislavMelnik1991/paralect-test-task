@@ -16,7 +16,7 @@ async function handler(ctx: AppKoaContext) {
     if (!product) {
       ctx.throw('Product at cart not found', 500);
     }
-    return { ...product, quantity, price };
+    return { ...product, inBasket: quantity, price };
   }));
   const amount = cart.current.reduce((total, product) => total + (product.price  * product.quantity), 0);
   const count = cart.current.reduce((total, product) => total + product.quantity, 0);

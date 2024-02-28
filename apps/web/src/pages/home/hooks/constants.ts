@@ -22,11 +22,11 @@ export const selectOptions: Array<{
     items: [
       {
         value: 'newest',
-        label: 'Newest',
+        label: 'Sort by newest',
       },
       {
         value: 'oldest',
-        label: 'Oldest',
+        label: 'Sort by oldest',
       },
     ],
   },
@@ -35,11 +35,11 @@ export const selectOptions: Array<{
     items: [
       {
         value: 'expensive',
-        label: 'Expensive',
+        label: 'Sort by expensive',
       },
       {
         value: 'cheap',
-        label: 'Cheap',
+        label: 'Sort by cheap',
       },
     ],
   },

@@ -15,8 +15,6 @@ const Home: NextPage = () => {
     isBueLoading,
     elements,
     amount,
-    handleUpdateQuantity,
-    isUpdateLoading,
   } = useCart();
   return (
     <>
@@ -29,11 +27,7 @@ const Home: NextPage = () => {
         {elements?.length ? (
           <Grid w="100%" columns={4} gutter={68}>
             <Grid.Col span={3}>
-              <CartTable
-                isUpdateLoading={isUpdateLoading}
-                handleUpdateQuantity={handleUpdateQuantity}
-                elements={elements}
-              />
+              <CartTable elements={elements} />
             </Grid.Col>
             <Grid.Col span={1}>
               <Button fullWidth h="100%" onClick={handleBue} loading={isBueLoading}>

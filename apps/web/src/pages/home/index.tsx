@@ -20,7 +20,6 @@ import {
 
 const Home: NextPage = () => {
   const {
-    handleAddToCart,
     isProductsLoading,
     data,
     account,
@@ -83,7 +82,6 @@ const Home: NextPage = () => {
                 <Results
                   data={data.items}
                   disabled={!account}
-                  handleAddToCart={handleAddToCart}
                   accountId={account?._id}
                 />
               ) : (

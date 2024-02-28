@@ -42,4 +42,5 @@ export interface CartProducts {
   name: string
   price: number
   quantity: number
+  available: number
 }

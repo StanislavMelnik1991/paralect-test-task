@@ -1,22 +1,36 @@
 import { Button } from '@mantine/core';
 import { memo } from 'react';
 import { IconX } from '@tabler/icons-react';
+import { z } from 'zod';
+import { cartApi } from 'resources/cart';
 
 type Props = {
-  changeQuantity: (val: number) => void
-  loading: boolean
+  id: string
 };
 
-const Remove = ({ changeQuantity, loading }: Props) => (
-  <Button
-    variant="subtle"
-    c="gray"
-    onClick={() => { changeQuantity(0); }}
-    loading={loading}
-    leftSection={<IconX />}
-  >
-    Remove
-  </Button>
-);
+const schema = z.object({
+  productId: z.string(),
+  quantity: z.number().min(0),
+});
+
+type AddToCartParams = z.infer<typeof schema>;
+
+const Remove = ({ id }: Props) => {
+  const {
+    isLoading,
+    mutate: updateQuantity,
+  } = cartApi.useUpdateQuantity<AddToCartParams>();
+  return (
+    <Button
+      variant="subtle"
+      c="gray"
+      onClick={() => { updateQuantity({ productId: id, quantity: 0 }); }}
+      loading={isLoading}
+      leftSection={<IconX />}
+    >
+      Remove
+    </Button>
+  );
+};
 
 export default memo(Remove);
