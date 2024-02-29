@@ -7,23 +7,22 @@ type Props = {
   elements: Array<CartProduct>
 };
 
-export const CartTable = ({ elements }: Props) => {
+export const HistoryTable = ({ elements }: Props) => {
   const rows = elements.map(({
     _id: id,
     quantity,
     name,
-    available,
     image,
     price,
+    createdOn,
   }) => (
     <Row
       key={id}
-      id={id}
       image={image}
-      inBasket={quantity}
       name={name}
-      quantity={available}
+      quantity={quantity}
       price={price}
+      date={new Date(createdOn)}
     />
   ));
   return (
@@ -31,14 +30,16 @@ export const CartTable = ({ elements }: Props) => {
       <Table.Thead>
         <Table.Tr>
           <Table.Th c="gray" fw="normal" maw={80}>Item</Table.Th>
-          <Table.Th c="gray" fw="normal" miw={144} />
+          <Table.Th c="gray" fw="normal" />
           <Table.Th c="gray" fw="normal" maw={144}>
             <Center>Unit Price</Center>
           </Table.Th>
           <Table.Th c="gray" fw="normal" maw={144}>
             <Center>Quantity</Center>
           </Table.Th>
-          <Table.Th c="gray" fw="normal" maw={144} />
+          <Table.Th c="gray" fw="normal" maw={144}>
+            <Center>Date</Center>
+          </Table.Th>
         </Table.Tr>
       </Table.Thead>
       <Table.Tbody>{rows}</Table.Tbody>

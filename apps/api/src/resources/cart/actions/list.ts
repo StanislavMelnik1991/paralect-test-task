@@ -1,4 +1,4 @@
-import { AppKoaContext, AppRouter } from 'types';
+import { AppKoaContext, AppRouter, CartProduct } from 'types';
 import { productService } from 'resources/product';
 
 async function handler(ctx: AppKoaContext) {
@@ -11,14 +11,18 @@ async function handler(ctx: AppKoaContext) {
     };
     return;
   }
-  const items = await Promise.all(cart.current.map(async ({ productId, quantity, price }) => {
+  const items: Array<CartProduct> = await Promise.all(cart.current.map(async ({ productId, ...old }) => {
     const product = await productService.findOne({ _id: productId });
-    if (!product) {
-      ctx.throw('Product at cart not found', 500);
-    }
-    return { ...product, inBasket: quantity, price };
+    ctx.assertClientError(product, {
+      productId: 'Product not found',
+    });
+    return {
+      ...productService.getCartFields(product),
+      ...old,
+      available: product.quantity,
+    } as CartProduct;
   }));
-  const amount = cart.current.reduce((total, product) => total + (product.price  * product.quantity), 0);
+  const amount = cart.current.reduce((total, product) => total + (product.price * product.quantity), 0);
   const count = cart.current.reduce((total, product) => total + product.quantity, 0);
 
   ctx.body = {

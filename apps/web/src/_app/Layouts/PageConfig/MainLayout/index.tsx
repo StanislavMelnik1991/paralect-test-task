@@ -13,7 +13,7 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => (
   <AppShell
     header={{ height: 72 }}
     padding={{
-      base: 32,
+      base: 4,
       xs: 4,
       sm: 4,
       md: 8,

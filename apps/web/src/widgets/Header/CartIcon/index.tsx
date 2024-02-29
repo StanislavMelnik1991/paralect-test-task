@@ -9,7 +9,7 @@ export const CartIcon = () => {
   const router = useRouter();
   return (
     <ActionIcon
-      color={router.route === RoutePath.Cart ? 'blue' : 'gray'}
+      color={router.route.startsWith(RoutePath.Cart) ? 'blue' : 'gray'}
       variant="subtle"
       pos="relative"
       size={40}

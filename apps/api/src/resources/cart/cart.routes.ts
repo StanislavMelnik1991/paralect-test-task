@@ -3,6 +3,7 @@ import { routeUtil } from 'utils';
 import addToCart from './actions/addToCart';
 import changeQuantity from './actions/changeQuantity';
 import list from './actions/list';
+import history from './actions/history';
 import paymentLink from './actions/paymentLink';
 import stripeWebhook from './actions/webhook';
 
@@ -14,6 +15,7 @@ const privateRoutes = routeUtil.getRoutes([
   changeQuantity,
   paymentLink,
   list,
+  history,
 ]);
 
 const adminRoutes = routeUtil.getRoutes([]);

@@ -23,7 +23,7 @@ const Component: FC = () => {
         variant="filled"
         onClick={() => router.push(RoutePath.Products)}
         className={classes.button}
-        disabled={router.route === RoutePath.Products}
+        disabled={router.route.startsWith(RoutePath.Products)}
       >
         Your Products
       </Button>

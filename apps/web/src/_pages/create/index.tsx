@@ -1,33 +1,33 @@
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, TextInput, Stack, Title } from '@mantine/core';
+import { Stack, Title } from '@mantine/core';
 import { productApi } from 'features/resources/products';
 import { handleError } from 'shared/utils';
-import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/router';
 import { RoutePath } from '_app/routes';
-import PhotoUpload from './PhotoUpload';
-import classes from './index.module.css';
+import { CreationForm, PreviewUpload } from 'widgets/Creation';
 
 const schema = z.object({
   name: z.string().min(3).max(256),
-  price: z.string().transform(parseFloat),
-  quantity: z.string().transform(parseFloat),
+  image: z.string(),
+  price: z.number().positive(),
+  quantity: z.number().positive(),
 });
 
 type CreateParams = z.infer<typeof schema>;
 
 const Profile = () => {
   const { push } = useRouter();
-  const [image, setImage] = useState('');
 
   const {
     register,
     handleSubmit,
     setError,
     formState: { errors },
+    getValues,
+    setValue,
   } = useForm<CreateParams>({
     resolver: zodResolver(schema),
   });
@@ -35,13 +35,10 @@ const Profile = () => {
   const {
     mutate: createProduct,
     isLoading: isUpdateLoading,
-  } = productApi.useCreate<CreateParams & { image: string }>();
+  } = productApi.useCreate<CreateParams>();
 
   const onSubmit = (submitData: CreateParams) => createProduct(
-    {
-      ...submitData,
-      image,
-    },
+    submitData,
     {
       onSuccess: async (data) => {
         toast(`${data.product.name} created`);
@@ -52,66 +49,27 @@ const Profile = () => {
   );
 
   return (
-    <Stack
-      w={408}
-      m="auto"
-      pt={48}
-      gap={32}
-    >
-      <Title order={1}>Profile</Title>
-      <PhotoUpload image={image} setImage={setImage} />
-
-      <form
-        className={classes.form}
-        onSubmit={handleSubmit(onSubmit)}
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Stack
+        maw={700}
+        gap={20}
       >
-        <Stack gap={20}>
-          <TextInput
-            {...register('name')}
-            label="Title of the product"
-            placeholder="Enter title of the product..."
-            labelProps={{
-              'data-invalid': !!errors.name,
-            }}
-            error={errors.name?.message}
-          />
-          {/* <NumberInput
-              {...register('price')}
-              label="Price"
-              prefix="$"
-              placeholder="Enter price of the product"
-              decimalScale={2}
-            /> */}
-          <TextInput
-            {...register('price')}
-            label="Price"
-            type="number"
-            placeholder="Enter price of the product"
-            labelProps={{
-              'data-invalid': !!errors.price,
-            }}
-            error={errors.price?.message}
-          />
-          <TextInput
-            {...register('quantity')}
-            type="number"
-            label="Quantity"
-            placeholder="Enter price of the product"
-            labelProps={{
-              'data-invalid': !!errors.quantity,
-            }}
-            error={errors.quantity?.message}
-          />
-        </Stack>
+        <Title order={3}>Create new product</Title>
 
-        <Button
-          type="submit"
-          loading={isUpdateLoading}
-        >
-          Create Product
-        </Button>
-      </form>
-    </Stack>
+        <PreviewUpload
+          image={getValues('image')}
+          updateImage={(val: string) => { setValue('image', val); }}
+          error={errors.image?.message}
+          setError={(message) => { setError('image', { message }); }}
+        />
+        <CreationForm
+          errors={errors}
+          isLoading={isUpdateLoading}
+          register={register}
+          setValue={setValue}
+        />
+      </Stack>
+    </form>
   );
 };
 

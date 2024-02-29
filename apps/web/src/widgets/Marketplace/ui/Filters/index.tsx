@@ -1,4 +1,4 @@
-import { Button, Card, Group, NumberInput, Text } from '@mantine/core';
+import { Button, Card, Grid, Group, NumberInput, Text } from '@mantine/core';
 import { IconX } from '@tabler/icons-react';
 import { Dispatch, SetStateAction } from 'react';
 
@@ -22,29 +22,33 @@ export const Filters = ({ data: [from, to], onChange }: Props) => (
     </Group>
     <Text mt={32} mb={12} fw="bold">Price</Text>
 
-    <Group display="flex" wrap="nowrap">
-      <NumberInput
-        leftSectionWidth={54}
-        suffix="$"
-        leftSection={<Text ml={12} size="sm">From</Text>}
-        value={from}
-        onChange={(val) => onChange([String(val), to])}
-        placeholder=""
-        allowNegative={false}
-        decimalScale={2}
-        hideControls
-      />
-      <NumberInput
-        leftSectionWidth={30}
-        leftSection={<Text size="sm">To</Text>}
-        value={to}
-        onChange={(val) => onChange([from, String(val)])}
-        suffix="$"
-        placeholder=""
-        allowNegative={false}
-        decimalScale={2}
-        hideControls
-      />
-    </Group>
+    <Grid grow>
+      <Grid.Col span={6} miw={140}>
+        <NumberInput
+          leftSectionWidth={54}
+          suffix="$"
+          leftSection={<Text ml={12} size="sm">From</Text>}
+          value={from}
+          onChange={(val) => onChange([String(val), to])}
+          placeholder=""
+          allowNegative={false}
+          decimalScale={2}
+          hideControls
+        />
+      </Grid.Col>
+      <Grid.Col span={6} miw={140}>
+        <NumberInput
+          leftSectionWidth={30}
+          leftSection={<Text size="sm">To</Text>}
+          value={to}
+          onChange={(val) => onChange([from, String(val)])}
+          suffix="$"
+          placeholder=""
+          allowNegative={false}
+          decimalScale={2}
+          hideControls
+        />
+      </Grid.Col>
+    </Grid>
   </Card>
 );

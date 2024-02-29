@@ -3,11 +3,11 @@ import { memo } from 'react';
 import classes from './index.module.css';
 
 type Props = {
-  image: string
+  image?: string
   name: string
 };
 
-const ProductImage = ({ image, name }: Props) => (
+const CustomImage = ({ image = '', name }: Props) => (
   <Image
     src={image}
     alt={name}
@@ -17,4 +17,4 @@ const ProductImage = ({ image, name }: Props) => (
   />
 );
 
-export default memo(ProductImage);
+export const TableImage = memo(CustomImage);

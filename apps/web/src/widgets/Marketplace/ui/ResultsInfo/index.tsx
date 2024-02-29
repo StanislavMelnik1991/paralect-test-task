@@ -1,7 +1,7 @@
-import { Box, Group, Pill, Select, Skeleton, Text } from '@mantine/core';
+import { Box, Group, Select, Skeleton, Text } from '@mantine/core';
 import { type ComboboxData } from '@mantine/core';
 import { IconArrowsSort, IconSelector } from '@tabler/icons-react';
-
+import { FilterLabel } from '_entities';
 import classes from './index.module.css';
 
 type Props = {
@@ -11,7 +11,7 @@ type Props = {
   value: string | null;
   onChange: (value: string) => void
   filter: [string | undefined, string | undefined]
-  onRemove: ()=>void
+  onRemove: () => void
 };
 
 export const ResultsInfo = ({
@@ -53,16 +53,8 @@ export const ResultsInfo = ({
         />
       </Skeleton>
     </Group>
-    <Pill.Group>
-      {!isLoading && filter[0] && (
-      <Pill
-        withRemoveButton
-        size="md"
-        onRemove={onRemove}
-      >
-        {`$${filter[0]}${filter[1] ? `-$${filter[1]}` : ''}`}
-      </Pill>
-      )}
-    </Pill.Group>
+    {(!!filter[0] || !!filter[1]) && (
+      <FilterLabel from={filter[0]} to={filter[1]} onRemove={onRemove} />
+    )}
   </Box>
 );

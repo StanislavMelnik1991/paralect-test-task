@@ -34,8 +34,9 @@ async function handler(ctx: AppKoaContext<ValidatedData>) {
   const existed = cart.current.find((val) => val.productId === productId);
   if (existed) {
     existed.quantity += quantity;
+    existed.updatedOn = new Date();
   } else {
-    cart.current.push({ productId, quantity, price: product.price });
+    cart.current.push({ productId, quantity, price: product.price, createdOn: new Date() });
   }
   await userService.updateOne(
     { _id: userId },
@@ -45,7 +46,7 @@ async function handler(ctx: AppKoaContext<ValidatedData>) {
     userId,
     productId,
   });
-  ctx.body = { cart };
+  ctx.body = { ok: true };
 }
 
 export default (router: AppRouter) => {

@@ -9,12 +9,12 @@ import { RoutePath } from '_app/routes';
 import { LogoImage } from 'public/images';
 
 import Link from 'next/link';
-import classes from './index.module.css';
 import {
   NavigationMenu,
   LogoutIcon,
   CartIcon,
-} from './components';
+} from 'widgets/Header';
+import classes from './index.module.css';
 
 const Header: FC = () => (
   <LayoutHeader>

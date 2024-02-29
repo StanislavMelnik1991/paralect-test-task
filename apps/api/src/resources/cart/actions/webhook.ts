@@ -52,13 +52,17 @@ async function handler(ctx: AppKoaContext<ValidatedData>) {
           await userService.updateOne(
             { _id: metadata.userId },
             () => {
-
               return {
                 cart: {
                   current: [],
                   history: [
                     ...history,
-                    ...current,
+                    ...current.map(({ createdOn, updatedOn, ...other }) => {
+                      return {
+                        ...other,
+                        createdOn: new Date(),
+                      };
+                    }),
                   ],
                 },
               };

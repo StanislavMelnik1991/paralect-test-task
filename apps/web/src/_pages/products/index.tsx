@@ -26,7 +26,7 @@ const Products = () => {
       </Text>
       <Stack w="100%" gap={20} h="100%" justify="center">
         {isProductsLoading && (
-        <Grid w="100%">
+        <Grid w="100%" grow>
           {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((item) => (
             <Grid.Col span={4} key={`sklton-${String(item)}`}>
               <Skeleton

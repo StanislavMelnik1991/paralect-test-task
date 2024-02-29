@@ -33,15 +33,15 @@ const Home = () => {
   } = useHome();
   return (
     <Stack className={classes.wrapper}>
-      <Grid w="100%" h="100%" columns={4} gutter={28}>
-        <Grid.Col span={1}>
+      <Grid w="100%" columns={4} gutter={28} grow>
+        <Grid.Col span={1} miw={300}>
           <Filters
             data={filterDate}
             onChange={handleFilter}
           />
         </Grid.Col>
-        <Grid.Col span={3} h="100%">
-          <Stack w="100%" gap={20} h="100%">
+        <Grid.Col span={3} miw={300}>
+          <Stack w="100%" gap={20}>
             <SearchProducts
               isLoading={isProductsLoading}
               setValue={setSearch}

@@ -45,6 +45,7 @@ async function handler(ctx: AppKoaContext<ValidatedData>) {
   );
 
   cartProduct.quantity = quantity;
+  cartProduct.updatedOn = new Date();
   cart.current = cart.current.filter((prod) => prod.quantity > 0);
 
 
@@ -56,7 +57,7 @@ async function handler(ctx: AppKoaContext<ValidatedData>) {
     userId,
     productId,
   });
-  ctx.body = { cart };
+  ctx.body = { ok: true };
 }
 
 export default (router: AppRouter) => {

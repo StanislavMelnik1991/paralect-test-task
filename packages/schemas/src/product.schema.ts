@@ -13,6 +13,4 @@ export const productSchema = dbSchema.extend({
   quantity: z.number().optional().default(1),
   pending: z.number().optional().default(0),
   sold: z.number().optional().default(0),
-
-  clientSecret: z.string().optional(),
 }).strict();

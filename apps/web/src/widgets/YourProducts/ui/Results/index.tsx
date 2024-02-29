@@ -14,14 +14,14 @@ type Props = {
 };
 
 export const Results = ({ data, addButton, handleDelete }: Props) => (
-  <Grid w="100%" gutter={20} columns={5}>
+  <Grid w="100%" gutter={20} columns={5} grow>
     {addButton && (
-      <Grid.Col span={1} key="add product">
+      <Grid.Col span={1} key="add product" miw={270} maw={270}>
         {addButton}
       </Grid.Col>
     )}
     {data?.map((product) => (
-      <Grid.Col span={1} key={product._id}>
+      <Grid.Col span={1} key={product._id} miw={270} maw={270}>
         <ProductCard
           product={product}
           secondaryButton={

@@ -1,4 +1,4 @@
-export { accountApi } from './account';
-export { cartApi } from './cart';
-export { productApi } from './products';
-export { userApi } from './user';
+export * from './account';
+export * from './cart';
+export * from './products';
+export * from './user';
