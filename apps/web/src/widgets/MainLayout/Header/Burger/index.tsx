@@ -4,12 +4,14 @@ import { accountApi } from 'features/resources';
 import { useRouter } from 'next/router';
 import { useDisclosure } from '@mantine/hooks';
 
-export const CustomBurger = () => {
+type Props = {
+  isLogin: boolean;
+};
+
+export const CustomBurger = ({ isLogin }: Props) => {
   const [opened, { toggle }] = useDisclosure();
   const router = useRouter();
-  const { useGet, useSignOut } = accountApi;
-  const { data } = useGet();
-  const { mutate: signOut } = useSignOut();
+  const { mutate: signOut } = accountApi.useSignOut();
   return (
     <Menu shadow="md" width={200} withinPortal={false}>
       <Menu.Target>
@@ -25,6 +27,7 @@ export const CustomBurger = () => {
         >
           Marketplace
         </Menu.Item>
+        {isLogin && (
         <Menu.Item
           color={router.route.startsWith(RoutePath.Products) ? 'gray' : 'dark'}
           onClick={() => router.push(RoutePath.Products)}
@@ -32,6 +35,8 @@ export const CustomBurger = () => {
         >
           Your Products
         </Menu.Item>
+        )}
+        {isLogin && (
         <Menu.Item
           color={router.route.startsWith(RoutePath.Cart) ? 'gray' : 'dark'}
           onClick={() => router.push(RoutePath.Cart)}
@@ -39,16 +44,17 @@ export const CustomBurger = () => {
         >
           Cart
         </Menu.Item>
+        )}
 
         <Menu.Divider />
 
-        {!data && (
+        {!isLogin && (
           <Menu.Item onClick={() => router.push(RoutePath.SignIn)}>
             SignIn
           </Menu.Item>
         )}
 
-        {data && (
+        {isLogin && (
           <Menu.Item onClick={() => signOut()}>
             Logout
           </Menu.Item>

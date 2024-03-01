@@ -9,11 +9,9 @@ import {
   PasswordInput,
   Group,
   Title,
-  Text,
   Checkbox,
 } from '@mantine/core';
 import { accountApi } from 'features/resources/account';
-import config from '_app/config';
 import { handleError } from 'shared/utils';
 import { RoutePath } from '_app/routes';
 import { EMAIL_REGEX, PASSWORD_REGEX } from 'app-constants';
@@ -42,10 +40,6 @@ const passwordRules = [
 ];
 
 const SignUp = () => {
-  const [email, setEmail] = useState('');
-  const [registered, setRegistered] = useState(false);
-  const [signupToken, setSignupToken] = useState();
-
   const [passwordRulesData, setPasswordRulesData] = useState(passwordRules);
 
   const {
@@ -72,38 +66,8 @@ const SignUp = () => {
   const { mutate: signUp, isLoading: isSignUpLoading } = accountApi.useSignUp<SignUpParams>();
 
   const onSubmit = (data: SignUpParams) => signUp(data, {
-    onSuccess: (response: any) => {
-      if (response.signupToken) setSignupToken(response.signupToken);
-
-      setRegistered(true);
-      setEmail(data.email);
-    },
     onError: (e) => handleError(e, setError),
   });
-
-  if (registered) {
-    return (
-      <Stack w={450}>
-        <Title order={2}>Thanks!</Title>
-
-        <Text size="md" c="gray.6">
-          Please follow the instructions from the email to complete a sign up process.
-          We sent an email with a confirmation link to
-          {' '}
-          <b>{email}</b>
-        </Text>
-
-        {signupToken && (
-        <Stack gap={0}>
-          <Text>You look like a cool developer.</Text>
-          <Link size="sm" href={`${config.API_URL}/account/verify-email?token=${signupToken}`}>
-            Verify email
-          </Link>
-        </Stack>
-        )}
-      </Stack>
-    );
-  }
 
   return (
     <Stack w={408} gap={32}>
