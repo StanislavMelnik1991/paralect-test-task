@@ -36,7 +36,7 @@ export const Results = ({ data, disabled, accountId }: Props) => {
       {data.map((product) => {
         const productInCart = cart?.items.find(({ _id: id }) => id === product._id);
         return (
-          <Grid.Col span={4} key={product._id} miw={250} maw={400}>
+          <Grid.Col span={4} key={product._id} miw={250}>
             <ProductCard
               product={product}
               mainButton={!productInCart ? (
