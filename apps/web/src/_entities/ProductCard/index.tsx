@@ -25,7 +25,7 @@ export const ProductCard = ({
     h="100%"
     shadow="sm"
     padding="md"
-    radius="xl"
+    radius="lg"
     withBorder
   >
     <Card.Section pos="relative">

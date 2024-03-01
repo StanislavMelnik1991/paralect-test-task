@@ -10,9 +10,9 @@ const mainTheme = createTheme({
     fontWeight: '600',
   },
   radius: {
-    xl: '12px',
-    lg: '10px',
-    md: '8px',
+    xl: '20px',
+    lg: '12px',
+    md: '10px',
     sm: '8px',
     xs: '6px',
   },

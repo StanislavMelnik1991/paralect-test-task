@@ -8,7 +8,7 @@ type Props = {
 };
 
 export const Filters = ({ data: [from, to], onChange }: Props) => (
-  <Card shadow="sm" padding="lg" radius="xl" withBorder>
+  <Card shadow="sm" padding="lg" radius="lg" withBorder>
     <Group justify="space-between">
       <Text fw="bold" size="md">Filters</Text>
       <Button

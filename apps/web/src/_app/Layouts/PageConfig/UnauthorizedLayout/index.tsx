@@ -24,7 +24,7 @@ const UnauthorizedLayout: FC<UnauthorizedLayoutProps> = ({ children }) => (
     <Center w="100%" h="100vh" component="main">
       {children}
     </Center>
-    <Card m={32} p={32} radius="xl" className={classes.card}>
+    <Card m={32} p={32} radius="lg" className={classes.card}>
       <Image
         alt="Logo"
         src="/images/logo.svg"

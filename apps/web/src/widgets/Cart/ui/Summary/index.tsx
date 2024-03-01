@@ -13,7 +13,7 @@ export const Summary = ({ amount, handleBue, isLoading }: Props) => (
     h="100%"
     shadow="sm"
     padding="md"
-    radius="xl"
+    radius="lg"
     withBorder
   >
     <Stack gap={32}>

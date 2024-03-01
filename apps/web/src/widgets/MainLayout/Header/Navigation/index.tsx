@@ -11,18 +11,20 @@ const Component: FC = () => {
     <nav className={classes.navigation}>
       <Button
         size="sm"
-        variant="filled"
+        variant="transparent"
+        radius="xl"
+        color={router.route === RoutePath.Home ? 'gray' : 'dark'}
         onClick={() => router.push(RoutePath.Home)}
-        className={classes.button}
         disabled={router.route === RoutePath.Home}
       >
         Marketplace
       </Button>
       <Button
         size="sm"
-        variant="filled"
+        variant="transparent"
+        radius="xl"
+        color={router.route === RoutePath.Products ? 'gray' : 'dark'}
         onClick={() => router.push(RoutePath.Products)}
-        className={classes.button}
         disabled={router.route.startsWith(RoutePath.Products)}
       >
         Your Products

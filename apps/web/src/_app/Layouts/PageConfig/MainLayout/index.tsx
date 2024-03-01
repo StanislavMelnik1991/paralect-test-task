@@ -1,7 +1,7 @@
 import { FC, ReactElement } from 'react';
 import { AppShell } from '@mantine/core';
 
-import Header from './Header';
+import { Header } from 'widgets/MainLayout';
 
 import classes from './MainLayout.module.css';
 

@@ -67,7 +67,7 @@ export const CreationForm = ({ register, errors, isLoading, setValue }: Props) =
       mt="sm"
       size="lg"
     >
-      Create Product
+      Upload Product
     </Button>
   </Stack>
 );

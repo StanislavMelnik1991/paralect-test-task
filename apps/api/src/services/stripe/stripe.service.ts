@@ -41,8 +41,8 @@ export class StripeService {
         metadata: { userId },
       },
       mode: 'payment',
-      success_url: `${config.WEB_URL}/cart`,
-      cancel_url: config.WEB_URL,
+      success_url: `${config.WEB_URL}/cart/success`,
+      cancel_url: `${config.WEB_URL}/cart/failed`,
 
     });
     return session;

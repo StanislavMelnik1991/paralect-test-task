@@ -1,4 +1,4 @@
-import Page from '_pages/cart';
+import Page from '_pages/paymentSuccessful';
 import { NextPage } from 'next';
 import Head from 'next/head';
 
